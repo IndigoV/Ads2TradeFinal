@@ -1,0 +1,49 @@
+BLESS LOCAL VS ADSFINAL TEST
+----------------------------------------------
+COPY/PASTE  TABLES
+
+location_country
+location_countries
+location_continent
+
+ALTER TABLE rate_card
+ADD `rat_frequency_meu_id`  smallint(6) NULL DEFAULT NULL;
+
+ALTER table uploaded_documents
+ADD `upd_date`  timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP;
+
+===============
+
+BLESS LOCAL VS JOSH TEST
+----------------------------
+COPY/PASTE TABLES
+
+advertiser_proposal
+asset_status
+location_continent
+location_countries
+location_province
+media_owner_transaction
+proposal_status
+rfp_for_submission
+rfp_for_submission_assets_selected
+rfp_for_submission_media_categories
+
+
+
+
+
+EDIT TABLE
+
+ALTER table campaign 
+MODIFY cam_budget float(10,2);
+ALTER table campaign ADD `processed`  int(11) NOT NULL ,
+       `pro_status_id`  smallint(6) NULL DEFAULT NULL;
+
+
+ALTER TABLE uploaded_documents
+ADD `use_id`  smallint(6) NULL DEFAULT NULL AFTER ass_id;
+
+ 
+
+

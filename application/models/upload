@@ -1,0 +1,9 @@
+<?php
+
+//to replace asssssssetsi model
+//
+class Upload extends CI_Model
+{
+
+}
+?>

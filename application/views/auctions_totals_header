@@ -1,0 +1,30 @@
+<?
+
+// My Active Bids
+$bid_type = 1; //Active [1=Active, 2=Won, 3=Lost]
+$myBids = $this->dashboard->userBids($user_id, $bid_type);
+$myBidsCount = 0;
+$myBidsTotal = 0;
+$first_record = true;
+foreach ($myBids as $row) {
+  $myBidsCount++;
+  $myBidsTotal += $row->bid;
+  if($first_record){
+    $myLatestBidAmount = $row->bid;
+    $first_record = false;
+  }
+}
+$total_active_bids = $myBidsCount;
+
+// My Watchlist 
+$myWatchlist = $this->dashboard->userWatchList($user_id);
+
+?>
+
+  <ul class="nav navbar-nav section-menu">
+    <li <?php echo ($page=='SEARCH')?'class="active"':'';?>><a href="<?php echo site_url('load_stock/asset_details3'); ?>">Search</a></li>
+    <li <?php echo ($page=='ACTIVE_BIDS')?'class="active"':'';?>><a href="<?php echo site_url('load_stock/active_bids'); ?>">Your Active Bids<span class="badge"><?php echo $myBidsCount;?></span></a></li>
+    <li <?php echo ($page=='WATCHLIST')?'class="active"':'';?>><a href="<?php echo site_url('load_stock/watch_list'); ?>">Watch List<span class="badge"><?php echo count($myWatchlist);?></span></a></li>
+    <li <?php echo ($page=='WON_BIS')?'class="active"':'';?>><a href="<?php echo site_url('load_stock/won_bids'); ?>">Won Bids</a></li>
+    <li <?php echo ($page=='LOST_BIDS')?'class="active"':'';?>><a href="<?php echo site_url('load_stock/lost_bids'); ?>">Lost Bids</a></li>
+  </ul>

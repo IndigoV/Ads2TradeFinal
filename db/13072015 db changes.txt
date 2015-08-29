@@ -1,0 +1,7 @@
+
+ALTER TABLE  `asset` ADD  `ass_duration` INT NULL ,
+ADD  `ass_duration_type` TINYINT NULL
+
+ALTER TABLE  `asset` ADD  `ass_population_group` VARCHAR( 150 ) NULL ,
+ADD  `ass_monthly_volumes` DOUBLE NULL ,
+ADD  `ass_daily_volumes` DOUBLE NULL

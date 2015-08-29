@@ -1,0 +1,486 @@
+<?php
+
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+
+class new_campaign extends CI_Controller {
+
+    public function __construct() {
+        parent::__construct();
+        $this->load->model('media_category');
+        $this->load->model('city');
+        $this->load->library('googlemaps');
+        $this->load->model('asset_size');
+        $this->load->model('uploaded_documents');
+        $this->load->model('rfp');
+    }
+    
+    public function loadrfp()
+	{
+
+            $data = array();
+            $data['rfp_det'] = $this->rfp->rfp_add_assets();
+            $this->load->view('loadrfp', null, array_merge($data));
+	}
+    
+
+    public function index() {
+
+        //get the media categories from the database
+        $media_cat['my_categories'] = $this->media_category->getMediaCategories();
+        $this->layouts->view('new_campaign', null, array_merge($media_cat));
+    }
+    
+     public function mo_proposals() {
+
+        //get the media categories from the database
+   
+    $data3 = array();
+    $data3['rfps'] = $this->rfp->mo_getRfp();
+        $this->layouts->view('mo_proposal', null, array_merge($data3));
+    }
+      public function ad_proposals() {
+
+        //get the media categories from the database
+   
+    $data3 = array();
+  //  $data3['rfps'] = $this->rfp->ad_getRfp();
+    $data3['rfps'] = $this->rfp->getRfp();
+        $this->layouts->view('ad_proposal', null, array_merge($data3));
+    }
+    
+     public function add_assets() {
+
+        //get the media categories from the database
+     
+     $id=$_GET['id'];  
+     $this->rfp->add_media_owner();
+     $this->campaigns1();
+    }
+    
+    public function submit_assets() {
+
+        //get the media categories from the database
+     
+     $this->rfp->create_proposal();
+     $this->layouts->view('record_created',null);
+    }
+    public function submit_proposal() {
+
+        //get the media categories from the database
+     
+     $this->rfp->submit_proposal();
+     $this->layouts->view('record_created',null);
+    }
+    
+   public function campaigns() {
+    $data3 = array();
+    $data3['rfps'] = $this->rfp->getRfp();
+        $this->layouts->view('op_campaign', null, array_merge($data3));
+    }
+    
+   public function ad_campaigns() {
+    $data3 = array();
+    $data3['rfps'] = $this->rfp->getRfp();
+        $this->layouts->view('ad_campaign', null, array_merge($data3));
+    }
+    
+    
+   public function proposals() {
+    $data3 = array();
+    $data3['rfps'] = $this->rfp->getRfp_prop();
+        $this->layouts->view('op_proposal', null, array_merge($data3));
+    }
+    
+    
+    public function campaigns1() {
+
+        //get the media categories from the database
+         $data1 = array();
+        $config['center'] = '-26.2044,28.0456';
+            $config['zoom'] = '7';
+            $config['places'] = TRUE;
+
+            $config['placesAutocompleteInputID'] = 'myPlaceTextBox';
+            $config['placesAutocompleteBoundsMap'] = TRUE;
+            $config['placesAutocompleteOnChange'] = 'var geocoder = new google.maps.Geocoder();
+        var address = document.getElementById("myPlaceTextBox").value;
+       var image = "http://localhost/maps/images/blue_icon.png";
+       
+                geocoder.geocode({ "address": address }, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+               //if(typeof marker != "undefined"){marker.setMap(null)};
+                $("#location").parent().removeClass("has-error");
+                var latitude = results[0].geometry.location.lat();
+                var longitude = results[0].geometry.location.lng();
+                $("#latitude").val(latitude);
+                $("#longitude").val(longitude);
+        
+mezmerize(address,latitude, longitude);
+
+                
+map.setCenter(new google.maps.LatLng(latitude, longitude), 9);
+map.setZoom(9);
+//google.maps.event.addListener(marker, "dragend", function (event) {
+//				latitude = this.getPosition().lat();
+//				longitude = this.getPosition().lng();
+//				$("#latitude").val(latitude);
+//				$("#longitude").val(longitude);
+//				});
+            } 
+        });
+
+';
+            $this->googlemaps->initialize($config);
+            $data1['map1'] = $this->googlemaps->create_map();
+         $data3 = array();
+         $data['rfps'] = $this->rfp->getRfp();
+         $data1['rfp_det'] = $this->rfp->getRfpDet();
+        $this->layouts->view('op_campaign_det', null, array_merge($data, $data1));
+    }
+   
+    
+     public function campaigns2() {
+
+        //get the media categories from the database
+         $data1 = array();
+        $config['center'] = '-26.2044,28.0456';
+            $config['zoom'] = '7';
+            $config['places'] = TRUE;
+
+            $config['placesAutocompleteInputID'] = 'myPlaceTextBox';
+            $config['placesAutocompleteBoundsMap'] = TRUE;
+            $config['placesAutocompleteOnChange'] = 'var geocoder = new google.maps.Geocoder();
+        var address = document.getElementById("myPlaceTextBox").value;
+       var image = "http://localhost/maps/images/blue_icon.png";
+       
+                geocoder.geocode({ "address": address }, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+               //if(typeof marker != "undefined"){marker.setMap(null)};
+                $("#location").parent().removeClass("has-error");
+                var latitude = results[0].geometry.location.lat();
+                var longitude = results[0].geometry.location.lng();
+                $("#latitude").val(latitude);
+                $("#longitude").val(longitude);
+        
+mezmerize(address,latitude, longitude);
+
+                
+map.setCenter(new google.maps.LatLng(latitude, longitude), 9);
+map.setZoom(9);
+//google.maps.event.addListener(marker, "dragend", function (event) {
+//				latitude = this.getPosition().lat();
+//				longitude = this.getPosition().lng();
+//				$("#latitude").val(latitude);
+//				$("#longitude").val(longitude);
+//				});
+            } 
+        });
+
+';
+            $this->googlemaps->initialize($config);
+            $data1['map1'] = $this->googlemaps->create_map();
+         $data3 = array();
+         $data['rfps'] = $this->rfp->getRfp_prop();
+         $data1['rfp_det'] = $this->rfp->getRfpDet_prop();
+        $this->layouts->view('op_proposal_det', null, array_merge($data, $data1));
+    }
+    
+    public function mo_campaigns1() {
+
+        //get proposal details
+        
+         $config['center'] = '-26.2044,28.0456';
+        $config['zoom'] = '7';
+        $config['places'] = TRUE;
+        
+        $config['placesAutocompleteInputID'] = 'myPlaceTextBox';
+        $config['placesAutocompleteBoundsMap'] = TRUE;
+        $config['placesAutocompleteOnChange'] = 'var geocoder = new google.maps.Geocoder();
+        var address = document.getElementById("myPlaceTextBox").value;
+       var image = "http://localhost/maps/images/blue_icon.png";
+       
+                geocoder.geocode({ "address": address }, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+               //if(typeof marker != "undefined"){marker.setMap(null)};
+                $("#location").parent().removeClass("has-error");
+                var latitude = results[0].geometry.location.lat();
+                var longitude = results[0].geometry.location.lng();
+                $("#latitude").val(latitude);
+                $("#longitude").val(longitude);
+        
+mezmerize(address,latitude, longitude);
+
+                
+map.setCenter(new google.maps.LatLng(latitude, longitude), 9);
+map.setZoom(9);
+//google.maps.event.addListener(marker, "dragend", function (event) {
+//				latitude = this.getPosition().lat();
+//				longitude = this.getPosition().lng();
+//				$("#latitude").val(latitude);
+//				$("#longitude").val(longitude);
+//				});
+            } 
+        });
+
+';
+        $this->googlemaps->initialize($config);
+        $data2['map'] = $this->googlemaps->create_map(); 
+        $data['rfps'] = $this->rfp->pro_getRfp();
+         $data1['rfp_det'] = $this->rfp->mo_getRfpDet();
+         $data3['mmm'] = $this->rfp->mo_getRfpDet();
+        $this->layouts->view('mo_campaign_det', null, array_merge($data, $data1,$data2,$data3));
+    }
+
+        public function ad_campaigns1() {
+
+        //get proposal details
+        
+         $config['center'] = '-26.2044,28.0456';
+        $config['zoom'] = '7';
+        $config['places'] = TRUE;
+        
+        $config['placesAutocompleteInputID'] = 'myPlaceTextBox';
+        $config['placesAutocompleteBoundsMap'] = TRUE;
+        $config['placesAutocompleteOnChange'] = 'var geocoder = new google.maps.Geocoder();
+        var address = document.getElementById("myPlaceTextBox").value;
+       var image = "http://localhost/maps/images/blue_icon.png";
+       
+                geocoder.geocode({ "address": address }, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+               //if(typeof marker != "undefined"){marker.setMap(null)};
+                $("#location").parent().removeClass("has-error");
+                var latitude = results[0].geometry.location.lat();
+                var longitude = results[0].geometry.location.lng();
+                $("#latitude").val(latitude);
+                $("#longitude").val(longitude);
+        
+mezmerize(address,latitude, longitude);
+
+                
+map.setCenter(new google.maps.LatLng(latitude, longitude), 9);
+map.setZoom(9);
+//google.maps.event.addListener(marker, "dragend", function (event) {
+//				latitude = this.getPosition().lat();
+//				longitude = this.getPosition().lng();
+//				$("#latitude").val(latitude);
+//				$("#longitude").val(longitude);
+//				});
+            } 
+        });
+
+';
+        $this->googlemaps->initialize($config);
+        $data2['map'] = $this->googlemaps->create_map(); 
+        $data['rfps'] = $this->rfp->pro_getRfp();
+         $data1['rfp_det'] = $this->rfp->mo_getRfpDet();
+         $data3['mmm'] = $this->rfp->mo_getRfpDet();
+        $this->layouts->view('ad_campaign_det', null, array_merge($data, $data1,$data2,$data3));
+    }
+
+    function headerInfo() {
+        $received_data = array();
+        $received_data['title'] = $_POST['title'];
+        $received_data['campaign_desc'] = $_POST['campaign_desc'];
+        $received_data['campaign_desc'] = $_POST['campaign_desc'];
+        if (isset($_POST['inlineRadio1'])) {
+            $partial_availability = 1;
+        } else {
+            $partial_availability = NULL;
+        }
+        $received_data['partial_availability'] = $partial_availability;
+        $received_data['budget'] = $_POST['budget'];
+        $received_data['start_date'] = $_POST['start_date'];
+        $received_data['end_date'] = $_POST['end_date'];
+        $received_data['respond_by'] = $_POST['respond_by'];
+        $category_ids['cat_id'] = $_POST['cat_id'];
+        //deal with the different categories that have been chosen
+        for ($i = 0; $i < count($_POST['cat_id']); $i++) {
+            //get the names of the categories 
+            $mazicategory[] = $this->media_category->getMediaCategoriesByID($category_ids['cat_id'][$i]);
+        }
+        $eish = array();
+        $eish['amai'] = $received_data;
+        foreach ($mazicategory as $key => $data) {
+            foreach ($data as $zvangu) {
+                $my_categories[] = $zvangu->mec_description;
+            }
+        }
+        $apa = array();
+        $apa['angu_macats'] = $my_categories;
+        //var_dump($apa);exit;
+        //get array of all towns and cities in south africa
+        $my_cities['matonaz'] = $this->city->getCities();
+        //var_dump($my_cities); exit;
+        
+        $config['center'] = '-26.2044,28.0456';
+        $config['zoom'] = '7';
+        $config['places'] = TRUE;
+        
+        $config['placesAutocompleteInputID'] = 'myPlaceTextBox';
+        $config['placesAutocompleteBoundsMap'] = TRUE;
+        $config['placesAutocompleteOnChange'] = 'var geocoder = new google.maps.Geocoder();
+        var address = document.getElementById("myPlaceTextBox").value;
+       var image = "http://localhost/maps/images/blue_icon.png";
+       
+                geocoder.geocode({ "address": address }, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+               //if(typeof marker != "undefined"){marker.setMap(null)};
+                $("#location").parent().removeClass("has-error");
+                var latitude = results[0].geometry.location.lat();
+                var longitude = results[0].geometry.location.lng();
+                $("#latitude").val(latitude);
+                $("#longitude").val(longitude);
+        
+mezmerize(address,latitude, longitude);
+
+                
+map.setCenter(new google.maps.LatLng(latitude, longitude), 9);
+map.setZoom(9);
+//google.maps.event.addListener(marker, "dragend", function (event) {
+//				latitude = this.getPosition().lat();
+//				longitude = this.getPosition().lng();
+//				$("#latitude").val(latitude);
+//				$("#longitude").val(longitude);
+//				});
+            } 
+        });
+
+';
+        $this->googlemaps->initialize($config);
+        $data3['map1'] = $this->googlemaps->create_map();
+        $this->layouts->view('new_campaign2', null, array_merge($eish, $apa, $my_cities, $data3));
+    }
+    
+    public function dynamic_table(){
+        $this->load->view('dynamic_table', null);
+    }
+    
+    public function city_cell(){
+          //get the size options from the database
+         $sizes['size_options'] = $this->asset_size->getMediaSizes();
+      // var_dump($sizes); exit;
+         $this->load->view('city_cell', $sizes);
+      
+    }
+    
+    public function campaignSummary(){
+        $passed_array['makaipa'] = unserialize($_POST['media_types']);
+               
+       //var_dump($passed_array); exit;
+          
+        //read through the array of post data
+        $campaign_header = array();
+        $campaign_header['street_addresses'] = $_POST['streetAdd'];
+        $campaign_header['camp_title'] = $_POST['camp_title'];
+        $campaign_header['camp_budget'] = $_POST['camp_budget'];
+        $campaign_header['start_date'] = $_POST['start_date'];
+        $campaign_header['end_date'] = $_POST['end_date'];
+        $campaign_header['respond_by'] = $_POST['respond_by'];
+        $campaign_header['partial_availability'] = $_POST['partial_availability'];
+        $campaign_header['campaign_desc'] = $_POST['campaign_desc'];
+        $campaign_header['proximity'] = $_POST['proximity'];
+        $myMedia['maziMedia'] = $_POST['media_types'];
+        $myGPS['maPosition'] = $_POST['lat'];
+       
+        //call the next screen for the process
+        $this->layouts->view('new_campaign3', null, array_merge($campaign_header, $myMedia, $myGPS, $passed_array));
+        
+        
+    }
+
+	public function upload_campaign() {
+
+		$image_path_base = 'uploaded_documents/campaign_assets/user_photos/';
+                $map_path_base = 'uploaded_documents/campaign_assets/map_snapshots/';
+
+		$campaign = array(
+			'id' =>  '',
+			'images' => array(
+				'user' => array(),
+				'map' => array()
+			)
+		);
+
+            
+                
+		if (array_key_exists('campaign_id', $_POST)) {
+			$campaign['id'] = $_POST['campaign_id'];
+			unset($_POST['campaign_id']);
+		}
+
+
+
+		foreach ($_POST as $key => $value) {
+			list($type, $id, $desc_or_image) = explode('_', $key);
+			if (!array_key_exists($id, $campaign['images'][$type])) {
+				$campaign['images'][$type][$id] = array(
+					'description' => '',
+					'image_path' => ''
+				);
+			}
+			if ($desc_or_image == 'description') {
+				$campaign['images'][$type][$id]['description'] = $value;
+			}else{
+				//Convert the image, move it and link its url
+				list($img_type, $data) = explode(';', $value);
+				list(, $ext) = explode('/', $img_type);
+				if (trim($ext) == '') {
+
+				}
+				list(, $data)      = explode(',', $data);
+				$data = base64_decode($data);
+				do {
+					$filename = uniqid($type."_") . "." . $ext;
+					$full_path = $image_path_base . $filename;
+				}while(file_exists($full_path));
+				if (!file_put_contents($full_path, $data)){
+					$campaign['images'][$type][$id]['image_path'] = 'Error';
+				}
+				$campaign['images'][$type][$id]['image_path'] = $full_path;
+			}
+		}
+
+		print_r($campaign);
+               // echo (count($campaign));
+		//Use $campaign
+                
+                //now store the campaign data in the uploaded documents table
+               // for($i=0;$i<count($campaign); $i++){
+                //print_r($campaign[$i]);
+                //$this->uploaded_documents->rfpDocs($this->session->userdata('user_id'));
+
+	}//}
+        
+        function saveCampaign(){
+              //my own rfp array
+                              if( $_REQUEST["name"] )
+{
+   $name = $_REQUEST['name'];
+    $cam_budget = $_REQUEST['budget'];
+  // echo "Welcome ". $name;
+}
+                
+                $rfp_details = array(
+                   'budget' =>$cam_budget,
+                    'respond_date'=>date('Y-m-d'),
+                    'title'=>'trymore test',
+                    'camp_descriptor'=> $name,
+                    'start_date'=>date('Y-m-d'),
+                    'end_date'=>date('Y-m-d'),
+                    'ast_id'=>3,
+                    'rfp_status_id' =>0,
+                    'use_id'=>$this->session->userdata('user_id')
+                );
+                //end of rfp array
+                
+                //store the rfp details
+                
+
+                
+                $this->rfp->rpfCommit($rfp_details);
+                
+                //end rfp commit 
+        }
+}
+

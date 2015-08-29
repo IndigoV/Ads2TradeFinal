@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+  <head>
+      <title>Ads to Trade</title>
+      <link rel="stylesheet" type="text/css" media="all" href="<?php echo base_url();?>assets/css/bootstrap.css" />
+      <link rel="stylesheet" type="text/css" media="all" href="<?php echo base_url();?>assets/styles.css" />
+      <link rel="stylesheet" type="text/css" media="all" href="<?php echo base_url();?>assets/css/dataTables.bootstrap.css" />
+      <link rel="stylesheet" type="text/css" media="all" href="<?php echo base_url();?>assets/css/bootstrap-checkbox.css" />
+      
+       <script src="<?php echo base_url();?>assets/js/jquery.min.js" type="text/javascript"></script>
+      <script src="<?php echo base_url();?>assets/js/bootstrap-checkbox.js" type="text/javascript"></script>
+
+     
+      <script src="<?php echo base_url();?>assets/scripts1.js" type="text/javascript"></script>
+      <script src="<?php echo base_url();?>assets/js/amcharts/amcharts.js" type="text/javascript"></script>
+      <script src="<?php echo base_url();?>assets/js/amcharts/serial.js" type="text/javascript"></script>
+
+      
+
+      <meta name="viewport" content="width=1024" />
+	  <?php echo $this->layouts->print_includes();?>
+	  
+     <link rel="stylesheet" type="text/css" media="all" href="<?php echo base_url();?>assets/styles.css" />
+	 <link rel="stylesheet" href="http://localhost/ads2trade_UI/new/assets/css/chosen.css">
+      <script src="http://localhost/ads2trade_UI/new/assets/js/chosen.jquery.js" type="text/javascript"></script>
+  </head>
+  <body>
+         <div id="top_bar">
+      <a href="#"><span class="glyphicon glyphicon-dashboard"></span> R23,900 (Estimate spent)</a>
+      <a href="#"><span class="glyphicon glyphicon-user"></span> Settings</a>
+    </div>
+<?php
+$loc_id='';   $ast_id=''; 
+if (isset($_REQUEST['ass_id'])){
+                $ass_id =  $_REQUEST['ass_id'];
+                $this->db->where('asset.ass_id', $_REQUEST['ass_id']);
+                $this->db->select('*');
+		$this->db->from('asset');
+                $this->db->join('auctions','asset.ass_id = auctions.ass_id', 'left outer');
+                $select_query = $this->db->get();
+			if ($select_query->num_rows > 0){
+			foreach ($select_query->result() as $rows){
+				$current_bid=$rows->current_bid;
+                                $loc_id = $rows->loc_id;
+                                $ast_id = $rows->ast_id;
+                                $ass_name = $rows->ass_name;
+                                $id = $rows->id;
+                                $buy_now = $rows->buy_now;
+                                
+		}
+                
+                }
+                
+                $this->db->where('tow_id', $loc_id);
+                $select_query = $this->db->get('town');
+			if ($select_query->num_rows > 0){
+			foreach ($select_query->result() as $rows){
+				$location=$rows->tow_description;
+                        }
+                
+                }
+                $this->db->where('ast_id', $ast_id);
+                $select_query = $this->db->get('asset_type');
+			if ($select_query->num_rows > 0){
+			foreach ($select_query->result() as $rows){
+				$asset_type=$rows->ast_description;
+                        }
+                
+                }
+}
+             
+             ?>  
+      <form name="form1" method="post" action="bid">  
+    <div class="modal fade" id="placeBid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="myModalLabel"><?php echo $ass_name;?></h4>
+          </div>
+          <div class="modal-body">
+           <div class="row">
+            <div class="col-xs-6">
+              <a class="thumbnail" href="auctions_details.php">
+                <img src="<?php echo base_url();?>assets/add1.jpg">
+              </a>
+            </div>
+             
+               
+            <div class="col-xs-6">
+              <table class="tables">
+                <tr>
+                  <td width="100">Current Bid <h3 style="margin:0px; margin-bottom:10px;"><?php echo $current_bid;?></h3></td>
+                </tr>
+                <tr>
+                  <td><span class="glyphicon glyphicon-flag"></span> <?php echo $location;?> </td>
+                </tr>
+                <tr>
+                  <td><input type="hidden" value="<?php echo $id;?>" name="auct_id"><span class="glyphicon glyphicon-tag"></span><?php echo $asset_type;?></td>
+                </tr>
+                <tr>
+                  <td><input type="hidden" value="<?php echo $ass_id;?>" name="ass_id"><span class="glyphicon glyphicon-time"></span> 3 Days 8 Hrs Remaining</td>
+                </tr>
+              </table>
+
+              <br>
+
+              <div class="form-group">
+                <div class="input-group">
+                  <input class="form-control" name="email" id="email" type="text" placeholder="R0.00">
+                  <a href="#" onclick="document.form1.submit();return false;" class="input-group-addon btn btn-primary">Place Bid</a>
+                </div>
+              </div>
+
+            </div>
+           </div>
+          </div>
+        </div>
+      </div>
+    </div></form>
+
+      <form name="form2" method="post" action="buynow">  
+    <div class="modal fade" id="buyNow" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="myModalLabel"><?php echo $ass_name;?></h4>
+          </div>
+          <div class="modal-body">
+           <div class="row">
+            <div class="col-xs-6">
+              <a class="thumbnail" href="auctions_details.php">
+                <img src="<?php echo base_url();?>assets/add1.jpg">
+              </a>
+            </div>
+            <div class="col-xs-6">
+              <table class="tables">
+                <tr>
+                  <td width="100">Buy Now Price <h3 style="margin:0px; margin-bottom:10px;"><?php echo $buy_now;?></h3></td>
+                </tr>
+                <tr>
+                  <td><span class="glyphicon glyphicon-flag"></span><?php echo $location;?></td>
+                </tr>
+                <tr>
+                  <td><input type="hidden" value="<?php echo $id;?>" name="auct_id"><span class="glyphicon glyphicon-tag"></span> <?php echo $asset_type;?></td>
+                </tr>
+                <tr>
+                  <td><input type="hidden" value="<?php echo $_REQUEST['ass_id'];?>" name="ass_id"><span class="glyphicon glyphicon-time"></span> 3 Days 8 Hrs Remaining</td>
+                </tr>
+              </table>
+
+              <br>
+
+              <a href="#" onclick="document.form2.submit();return false;" class="btn btn-primary btn-block">Buy Now</a>
+
+            </div>
+           </div>
+          </div>
+        </div>
+      </div>
+    </div></form>
+
+
+      <form name="form3" method="post" action="addwatch"><div class="modal fade" id="watchList" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body"><input type="hidden" value="<?php echo $_REQUEST['ass_id'];?>name="ass_id">
+                                         <input type="hidden" value="<?php echo $id;?>" name="auct_id">
+            <h4 class="text-center">This Item will be added to you watch list</h4>
+          </div>
+          <div class="modal-footer">
+            <button type="button" onclick="document.form3.submit();return false;" class="btn btn-primary" data-dismiss="modal">Add To My Watch List</button>
+          </div>
+        </div>
+      </div>
+    </div></form>
+
+    <div class="container">
+    <div class="page_wrap">
+      <div class="top_bar">
+        
+        <button type="button" class="mobi-menu-toggle hidden-sm hidden-md hidden-lg" data-toggle="collapse" data-target=".side_bar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+
+      <div class="side_bar">
+
+        <div class="slogo">
+          <a href="#"><img src="<?php echo base_url();?>assets/logo.png"></a>
+        </div>
+        <ul>
+         <?php if($this->session->userdata('user_type') == 1){?>  
+          <li><a href="../navigate/index" class="active"><span class="glyphicon glyphicon-home"></span>Dashboard</a></li>
+          <li>
+            <a href="../load_stock/asset_details3" ><span class="glyphicon glyphicon-list-alt"></span>Auctions</a>
+          </li>
+          <li>
+            <a href="#"><span class="glyphicon glyphicon-globe"></span>Campaigns</a>
+          </li>
+          <li>
+            <a href="#"><span class="glyphicon glyphicon-file"></span>Invoices</a>
+          </li>
+          
+          <li>
+            <a href="../rfp/rfp1"><span class="glyphicon glyphicon-file"></span>RFP</a>
+          </li>
+          
+          <li><a href="#"><span class="glyphicon glyphicon-cog"></span>Settings</a></li>
+          <li><a href="<?php echo base_url();?>index.php/login/logout"><span class="glyphicon glyphicon-off"></span>Logout</a></li>
+          <?php } else
+          if($this->session->userdata('user_type') == 2){  ?>
+          <li><a href="../navigate/index" class="active"><span class="glyphicon glyphicon-home"></span>Dashboard</a></li>
+          <li>
+            <a href="../navigate/auction" ><span class="glyphicon glyphicon-list-alt"></span>Auctions</a>
+          </li>
+          <li>
+            <a href="#"><span class="glyphicon glyphicon-globe"></span>Campaigns</a>
+          </li>
+          <li>
+            <a href="#"><span class="glyphicon glyphicon-file"></span>Invoices</a>
+          </li>
+          
+          <li>
+            <a href="../rfp/rfp_list"><span class="glyphicon glyphicon-file"></span>RFP</a>
+          </li>
+          
+          <li><a href="#"><span class="glyphicon glyphicon-cog"></span>Settings</a></li>
+          <li><a href="<?php echo base_url();?>index.php/login/logout"><span class="glyphicon glyphicon-off"></span>Logout</a></li>
+           <?php } elseif($this->session->userdata('user_type') == 3){  ?>
+          
+          <li>
+            <a href="<?php echo site_url("navigate/index")?>" class="active"><span class="glyphicon glyphicon-home"></span>Dashboard</a>
+          </li>
+          <li>
+            <a href="<?php echo site_url("my_stock/op_index")?>" ><span class="glyphicon glyphicon-list-alt"></span>Auctions</a>
+          </li>
+          <li>
+            <a href="<?php echo site_url("campaign")?>"><span class="glyphicon glyphicon-globe"></span>Campaigns</a>
+          </li>
+          <li>
+            <a href="<?php echo site_url("invoice") ?>"><span class="glyphicon glyphicon-file"></span>Invoices</a>
+          </li>
+          
+          <li>
+            <a href="<?php echo site_url("rfp/rfp_list") ?>"><span class="glyphicon glyphicon-file"></span>RFP</a>
+          </li>
+
+          <li><a href="<?php echo site_url("settings") ?>"><span class="glyphicon glyphicon-cog"></span>Settings</a></li>
+          <li><a href="<?php echo site_url("login/logout") ?>"><span class="glyphicon glyphicon-off"></span>Logout</a></li>
+          <?php } ?>
+         
+          
+          
+        </ul>
+      </div>
+
+      <div class="main_content">

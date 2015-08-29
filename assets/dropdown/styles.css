@@ -1,0 +1,32 @@
+body{ background-color: #fff; line-height: 24px; padding-top: 100px;}
+/*.container{ max-width: 1022px; }*/
+
+.clear{ clear: both;}
+img{ max-width: 100%; max-height: 100%;}
+a{ text-decoration: none;}
+a:hover{ text-decoration: none;}
+a:active{ text-decoration: none;}
+
+.form-control{ border-radius: 0px; margin-bottom: 10px;}
+img{ max-width: 100%;}
+
+
+/* =Header
+----------------------------------------------- */
+#new_menu{ background-color: #52bad5; float: left; width: 100%; padding: 0px; margin: 0px; position: relative; height: 60px; border-radius: 5px;}
+#new_menu .media_owners_select{ float: left;  margin-right: 20px; width: 200px;}
+#new_menu .media_owners_select select{ margin: 0px; margin: 8px; border: none; border-radius: 0px;}
+
+#new_menu li{ float: left; border-left: solid 1px #58ddf3; position: relative; margin-top: 9px;}
+#new_menu li a{ color: #fff; float: left; padding: 5px 10px;}
+#new_menu li .drop_down{z-index: 5; display: none; background-color: #fff; border: solid 1px #e1e1e1; border-top: none; position: absolute; top: 41px; right: 0px; left: 0px; padding-top: 0px; border-radius: 0px 0px 5px 5px; overflow: hidden; min-width: 300px; color: #444; font-size: 13px;}
+#new_menu li .drop_down a{ float: none; color: #337ab7; padding: 0px;}
+#new_menu li .drop_down .block{ display: block;}
+#new_menu li .drop_down .d_content{ padding: 20px;}
+#new_menu li .drop_down.dates{ left: -290px; width: 500px;}
+#new_menu li .drop_down.dates .d_content table{ width: 100%;}
+#new_menu li .drop_down.dates .d_content table td{ font-size: 13px; padding: 5px; vertical-align: middle;}
+#new_menu li .drop_down.active{ display: block;}
+#new_menu li .drop_down .d_buttons{ background-color: #f1f1f1; padding: 15px; text-align: right;}
+#new_menu li .drop_down .d_buttons a.btn{  float: none; padding: 6px 12px;}
+#new_menu li .drop_down .d_buttons a.btn.btn-primary{ color: #fff;}

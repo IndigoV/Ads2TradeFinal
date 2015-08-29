@@ -1,0 +1,44 @@
+Workflows
+
+Table 1 (cam_id)
+---------------
+Checkbox
+Campaign Num + Name (cam_id , cam_title)
+Confirmed Date (cam_creation_date)
+Start Date (cam_requested_start_date)
+End Date  (cam_requested_end_date)
+Site QTY (total # of assets)? - count campaign_transaction (where cam_id=cam_id)
+                                OR - sum campaign_transaction.quantity (where cam_id=cam_id)
+Status (Contact, RFP, Quotation/Proposal) (campaign_status.cas_description: cas_id=campaign.cas_id)
+Workflow (Artwork etc) (latest status from all assets/sites?)
+Rental (money) 
+P & P (production cost)
+Commision (money)
+Contract Value (money) (cam_budget)
+Contract Duration         
+
+
+Table 2
+---------------------------
+??Checkbox
+Media Type
+Media Owner Site (ref)
+A2T Site Ref
+Site Category (Indoor/Outdoor etc)
+Site Type (Streetpole etc)
+Site Description
+Size (12x100 etc)
+Region (gauteng etc)
+Town (Jhb etc)
+Surbub (Sandton etc)
+Street Address
+Face Side (A/B etc)
+Road Side (Left , Right etc) 
+Rental Duration (monthly etc)
+Rate (money)
+Print & Production (money)
+Workflow Stage (Artwork Pending etc)
+
+
+
+

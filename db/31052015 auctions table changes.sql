@@ -1,0 +1,1 @@
+ALTER TABLE  `auctions` ADD  `current_bidder` INT NULL DEFAULT NULL AFTER  `current_bid`
