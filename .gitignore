@@ -1,0 +1,11 @@
+assets/mapping/uploaded/proxy/
+assets/mall/upload/
+assets/mall/src/
+application/config/database.php
+application/config/config.php
+application/libraries/tcpdf.zip
+user_guide/*
+application/config/database.php.sample
+*.sample
+.idea
+*.htaccess
