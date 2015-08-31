@@ -11,14 +11,16 @@ NOTE: Blessed - 18.08.2015
     <!-- Media Category -->
     <li>
 	<form name="filter_form" method="post">
-      <a href="#">Media Category <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></a>
+      <a href="#">Media Category <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
 	  <?php
-	  $mc = $_POST['media_category'];
+	  $mc = $_POST['media_category']; 
+	  $filter_display = "";
 	  foreach ($mc as $key=>$value1){
-		  
+		  $filter_display .= $value1.",";
 	  }
-	  echo "<br/><font color=white><p>$value1</p></font>"
+	  echo "<br/><font color=white><div style='margin-top:-2px;'>".substr($value1, 0, 17)."...</div></font>"
 	  ?>
+      </a>
       <div class="drop_down">
         <div class="d_content">
           <a href="#" class="selectAllMediaCategory">Select All</a> <span>|
@@ -66,14 +68,16 @@ NOTE: Blessed - 18.08.2015
 
     <!-- Media Type -->
     <li>
-      <a href="#">Media Type <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></a>
+      <a href="#">Media Type <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
 	  <?php
 	  $mt = $_POST['media_type'];
+	  $filter_display = "";
 	  foreach ($mt as $key=>$value2){
-		  
+			$filter_display .= $value2.","; 
 	  }
-	  echo "<br/><font color=white><p>$value2</p></font>"
+	  echo "<div  style='margin-top:-2px; '>".substr($value2, 0, 17)."...</div>"
 	  ?>
+      </a>
       <div class="drop_down">
         <div class="d_content">
           <a href="#">Select All</a> <span>|</span> <a href="#">Clear All</a>
@@ -131,14 +135,17 @@ NOTE: Blessed - 18.08.2015
     </li>
 
     <li>
-      <a href="#">Auction Status <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></a>
+      <a href="#">Auction Status <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
 	  <?php
 	  $as = $_POST['auction_status'];
+	  $filter_display = "";
 	  foreach ($as as $key=>$value3){
-		  
+			$filter_display .= $value3. ", ";  
 	  }
-	  echo "<br/><font color=white><p>$value3</p></font>"
+	  echo "<div style='margin-top:-2px;'>".substr($value3, 0, 17)."...</div>"
 	  ?>
+      </a>
+
       <div class="drop_down">
         <div class="d_content">
           <a href="#">Select All</a> <span>|</span> <a href="#">Clear All</a>
@@ -173,15 +180,16 @@ NOTE: Blessed - 18.08.2015
 
 
     <li>
-      <a href="#">Active / Not Active <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></a>
-	   <?php
+      <a href="#">Active / Not Active <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+	  <?php
 	  $active = $_POST['activeNotActive'];
+	  $filter_display = "";
 	  foreach ($active as $key=>$value4){
-		  
+			$filter_display .= $value4.", ";  
 	  }
-	  echo "<br/><font color=white><p>$value4</p></font>"
+	  echo "<div style='margin-top:-2px;'>".substr($value4, 0, 17)."...</div>"
 	  ?>
-	  
+      </a>
       <div class="drop_down">
         <div class="d_content">
 
@@ -209,14 +217,17 @@ NOTE: Blessed - 18.08.2015
 
 
     <li>
-      <a href="#">Media Status <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></a>
+      <a href="#">Media Status <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
 	  <?php
 	  $ms = $_POST['media_status'];
+	  $filter_display = "";
 	  foreach ($ms as $key=>$value5){
-		  
+		 	$filter_display .= $value5.", "; 
 	  }
-	  echo "<br/><font color=white><p>$value5</p></font>"
+	  echo "<div style='margin-top:-2px;'>".substr($value5, 0,17)."...</div>";
 	  ?>
+      </a>
+
       <div class="drop_down">
         <div class="d_content">
           <a href="#">Select All</a> <span>|</span> <a href="#">Clear All</a>
