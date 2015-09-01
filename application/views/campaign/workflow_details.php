@@ -1403,7 +1403,7 @@ $(".chkAssetStatus").click(function(){
 	</div>
 	<div class="modal-body">
 		<div class="form-group">
-			Select the New Asset Status <select name="asset_status" id="cbo_asset_status" class="form-control">
+			<label>Select the New Asset Status</label> <select name="asset_status" id="cbo_asset_status" class="form-control">
 			<?php 
 			$default_date = date('Y-m-d H:j:s');
 			foreach ($asset_status as $row) {
@@ -1420,9 +1420,9 @@ $(".chkAssetStatus").click(function(){
 		</div>
 
 		<div class="form-group">
-			<label>Comments
+			<label>Comments</label>
 			<textarea rows="4" class="form-control" placeholder="Enter your comments here" id="asset_status_comment"></textarea>
-			</label>
+			
 		</div>
 		<div class="form-group">
 		  <center>
