@@ -313,8 +313,8 @@ if($user_type == 2 || $user_type == 3 || $user_type > 0){
 				var commentIsOK = false;
 				var campaign_id = "<?php echo $this->input->get('id'); ?>";
 				var comments = $('#asset_status_comment').val();
-				//var new_status = $('#asset_status').val(); //get all statuses
-				var new_status = $("input:radio[name='asset_status']:checked").val();
+				var new_status = $('#cbo_asset_status').val(); //get the selected status
+				//var new_status = $("input:radio[name='asset_status']:checked").val();
 				var datetime = $('#asset_datetime').val();
 				var update_status_all = $("input:radio[name='update_status_all']:checked").val();
 
@@ -927,7 +927,7 @@ $(".chkAssetStatus").click(function(){
                       <div class="tab-pane fade in active" id="view_table">
                       	<div class="row">					        
 					        <div class="table-responsive" style="background: #f6f6f6;">
-					        	<div class="col-xs-3">
+					        	<div class="col-xs-5">
 
 					        		<div class="panel panel-default">					        		
 
@@ -1012,6 +1012,7 @@ $(".chkAssetStatus").click(function(){
 
 					        	</div>
 
+					        	<!--
 					        	<div class="col-xs-3">
 
 					        		<div class="panel panel-default">
@@ -1020,18 +1021,6 @@ $(".chkAssetStatus").click(function(){
 
 									<table class="table table-curved">
 										<thead>
-											<!--
-											<tr>
-												<td>
-													<label><input type="checkbox" checked="checked">Not Started</label>
-												</td>
-												<td>
-													<label>n/a</label>
-													<label><input type="radio" name="radio" class="bootstrap-checkbox"> Checkbox 1</label>
-													<label><input type="radio" name="radio" class="bootstrap-checkbox"> Checkbox 2</label>													
-												</td>
-											</tr>
-											-->	
 											<?php 
 											foreach ($asset_status as $row) {
 												// Only show statuses after $last_worfklow_status
@@ -1047,8 +1036,6 @@ $(".chkAssetStatus").click(function(){
 													</label>
 												</td>
 												<td>
-													<!-- <label class="btn btn-primary" title="Select Date/Time">Date</label> -->
-													<!--<input class="form-control datepicker" name="created_at"> -->
 													 <div class="form-group has-feedback">
 													    <label class="control-label"></label>
 													    <input type="text" class="form-control datepicker" placeholder="Pending" name="created_at"  value="<?php echo $default_date; ?>" />
@@ -1064,10 +1051,10 @@ $(".chkAssetStatus").click(function(){
 
 									</div>
 					        	</div>
-
+					        	-->
 
 								<!-- Messaging Component --> 
-								<div class="col-xs-6">
+								<div class="col-xs-7">
 
 								      <div class="panel panel-default">
 								        <div class="panel-heading">Workflow Messaging</div>
@@ -1416,7 +1403,26 @@ $(".chkAssetStatus").click(function(){
 	</div>
 	<div class="modal-body">
 		<div class="form-group">
+			Select the New Asset Status <select name="asset_status" id="cbo_asset_status" class="form-control">
+			<?php 
+			$default_date = date('Y-m-d H:j:s');
+			foreach ($asset_status as $row) {
+				// Only show statuses after $last_worfklow_status		
+			?>
+				<option value="<?php echo $row->asset_status_id;?>"><?php echo $row->asset_status;?></option>
+			<?php
+				}
+			?>	
+			</select>
+			<input type="hidden" name="asset_new_status" id="asset_new_status" value="<?php echo $default_status; ?>">
+			<input type="hidden" name="asset_datetime" id="asset_datetime" value="<?php echo $default_date; ?>" data-placeholder="multiple">
+			<input type="hidden" class="form-control datepicker" placeholder="Pending" name="created_at"  value="<?php echo $default_date; ?>" />
+		</div>
+
+		<div class="form-group">
+			<label>Comments
 			<textarea rows="4" class="form-control" placeholder="Enter your comments here" id="asset_status_comment"></textarea>
+			</label>
 		</div>
 		<div class="form-group">
 		  <center>
