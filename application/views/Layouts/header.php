@@ -9,6 +9,7 @@ if(!$this->session->userdata('user_id')){
   redirect(base_url());exit;
 } else {
   $user_id = $this->session->userdata('user_id');
+  $user_name = $this->session->userdata('username');
   //Just in case they have not been included by the controller we are on
   $this->load->model('assets');
   $this->load->model('auction');      
@@ -119,6 +120,7 @@ if(!$this->session->userdata('user_id')){
   </head>
   <body onload="createMap()">
     <div id="top_bar">
+	  <?php echo "Logged in as: ".$user_name." |"?>
       <a href="#" title="Includes. Bids, RFPs & unpaid Invoices"><span class="glyphicon glyphicon-dashboard"></span> 
 
         <?php
@@ -129,11 +131,11 @@ if(!$this->session->userdata('user_id')){
         $allInvoicesValue = $this->session->userdata('allInvoicesValue');
         
         ?>
-
       R<?php echo number_format($allBidsValue + $allRFPsValue + $allInvoicesValue,2)?> (Estimate spend)
       </a>
       <?php echo anchor('messages/inbox', "<span class=\"badge\">".$this->events->getCountUnreadMessages($user_id)."</span> Inbox", 'title="My Messages"');?>
       <a href="<?php echo site_url("user/edit?id="),$user_id; ?>"><span class="glyphicon glyphicon-user"></span> Settings</a>
+	  <a href="<?php echo site_url("login/logout"); ?>"><span class="glyphicon glyphicon-off"></span> Logout</a>
     </div>
 <?php
 
