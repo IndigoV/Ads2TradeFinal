@@ -257,6 +257,8 @@ $asset_type = $this->input->get('type'); //outdoor or indoor
         
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/mapping/js/AdsMap.js"></script>
 
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/mapping/js/redrawMap.js"></script>
+
 <!-- mapping requirements end -->
 
 <div class="breadcrumbs" style="margin-top:-100px;">
@@ -994,6 +996,7 @@ Hidden field to ghold currently selected asset id
 //globals for tracking asset and activation function
 var activate_ass_id;
 var activate_ass_action;
+var first_time = true;
 
 function GetAddress(latLongValue) {
             var latLongValue = latLongValue.split(",");
@@ -1015,109 +1018,55 @@ function GetAddress(latLongValue) {
 $(document).ready(function() {
     $('#example').dataTable({
       });
-} );
-/*
-$(document).ready(function() {
-  var oTable = $('#example').dataTable( {
-    "bProcessing": true,
-    //"sAjaxSource": "http://localhost/objects.txt",
-    "ajax": "<?php echo site_url('load_stock/ajax_my_assets'); ?>",
-    "aoColumns": [
-      { "mDataProp": "DT_RowId" },
-      { "mDataProp": "ass_name" },
-      { "mDataProp": "ass_description" },
-      { "mDataProp": "description" },
-      //{ "mDataProp": "position" },
-      {
-          mRender: function(data, type, row){
-            //return GetAddress(row.position) ;
-            return row.position ;
-          }
-      },
-      { "mDataProp": "ass_status" },
-      { "mDataProp": "ass_date" },
-      //{ "mDataProp": null, "defaultContent": function (data, type, row){ return "Menus will go here";} }
-      {
-          mRender: function(data, type, row){
-              var au_btn_disabled = false;
-              var ac_btn_disabled = false;
-              var au_btn_icon = 'glyphicon-shopping-cart';
-              var ac_btn_icon = 'glyphicon-check';
-              var au_css_disabled = '';
-              var ac_css_disabled = '';
-              var edit_link = '<?php echo site_url('load_stock/view_asset');?>?ass_id='+row.ass_id;
 
-              if(au_btn_disabled == true){
-                au_btn_icon = 'glyphicon-lock';
-                au_css_disabled = 'disabled';
-              } 
+	var table = $('#example').DataTable();
+	 
+	$('#example').on( 'draw.dt', function () { //page.dt is when page changes but before the new page data has been rendered
+	    
+	    var info = table.page.info();
+	    var ids = "28,29,30,31";
 
-              if(ac_btn_disabled == true){
-                ac_btn_icon = 'glyphicon-unchecked';
-                ac_css_disabled = 'disabled';
-              } 
+	    first_time = false;
+	    //alert( 'Showing page: '+info.page+' of '+info.pages );
+	    var ids = getAllAssetsOnCurrentPage();
 
-              return '<a title="Create Auction" style="cursor:pointer" data-toggle="modal" data-target="#addAuctionCart"'+ 
-                +'data-id="' + row.ass_id + '" data-name="(' + row.ass_name +')' + row.ass_description + '" data-price="0"'+
-                +'class="'+ au_css_disabled +'">'+
-                +'<span class="h4 glyphicon '+ au_btn_icon +'"></span></a>' ;
-          }
-      }
-    ]
-  } );
-} );
-*/
-/*
-$(document).ready(function() {
-    var t = $('#example').DataTable( {
-        "ajax": "<?php echo site_url('load_stock/ajax_my_assets'); ?>",
-        //"ajax":"http://datatables.net/beta/1.8/examples/ajax/sources/objects.txt",
-            "aoColumns": [
-            { "data": "DT_RowId" },
-            { "data": "ass_name" },
-            { "data": "ass_description" },
-            { "data": "description" },
-            { "data": "ass_status" },
-            { "data": "ass_date" }
-          ],
-        "columnDefs": [ {
-            "searchable": false,
-            "orderable": false,
-            "targets": 0
-        } ],
-        "order": [[ 1, 'asc' ]]
-    } );
- 
-    t.on( 'order.dt search.dt', function () {
-        t.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-            cell.innerHTML = i+1;
-        } );
-    } ).draw();
-} );
-*/
-/*
-$(document).ready(function() {
-    $('#example').dataTable({
-        "processing": true,
-        "serverSide": true,
-        "ajax": "<?php echo site_url('load_stock/ajax_my_assets'); ?>",
-        "deferLoading": 100
-      });
+		if(first_time == false){
+	    	deleteMarkers();
+	    	redrawMap(ids);
+		}
+
+	} );
+
 } );
 
-$(document).ready(function() {
-    $('#example').dataTable( {
-        "ajax": "<?php echo site_url('load_stock/ajax_my_assets'); ?>",
-        "columns": [
-            { "data": "ass_name" },
-            { "data": "ass_description" },
-            { "data": "description" },
-            { "data": "position" },
-            { "data": "ass_status" },
-        ]
-    } );
-} );*/
+// Sets the map on all markers in the array.
+function setMapOnAll(map) {
+  for (var i = 0; i < markers.length; i++) {
+  	//console.log(markers[i]);
+    markers[i].setMap(map);
+  }
+}
 
+// Removes the markers from the map, but keeps them in the array.
+function clearMarkers() {
+  setMapOnAll(null);
+}
+
+// Shows any markers currently in the array.
+function showMarkers() {
+  setMapOnAll(map);
+}
+
+// Deletes all markers in the array by removing references to them.
+// Also delete markerClusters
+// Trigger map resize (i.e. redraw map)
+function deleteMarkers() {
+  clearMarkers();
+  markers = [];
+  adsMap.spider.clearMarkers();
+  adsMap.markerCluster.clearMarkers();
+  google.maps.event.trigger(map, 'resize');
+}
 
 //Print Buttons
 //prt_map,prt_tbl,prt_sum,prt_det
@@ -1153,6 +1102,21 @@ $("#lblPrintDetail").on('click',function(){
 	printSpecSheets();
 	//print table div
 });
+
+function getAllAssetsOnCurrentPage(){
+	var allAssetCheckboxes = document.getElementsByClassName('chkSelectAll');
+	var allSelected = 0;
+	var specSheetPage = "";
+    for(var j = 0; j < allAssetCheckboxes.length; j++) {
+    	var e = allAssetCheckboxes[j];
+    	if((e.type=='checkbox') && (!e.disabled)){
+    	    allSelected += ',' + e.value;
+    	}
+    }	
+    //alert("Reload Map with: " + allSelected + " ...");
+
+    return allSelected;
+}
 
 function printSpecSheets(detailed){
 	var allAssetCheckboxes = document.getElementsByClassName('chkSelectAll');
@@ -1266,6 +1230,7 @@ $(".asset_mode .btn").click(function() {
     var disableListener = false;
     var centerposition = new google.maps.LatLng(-26.063214,27.943271);
     var marker_icon = base_url + 'assets/mapping/images/media_11.png';
+    var markers = [];
 
     function initialize() {
         var mapOptions = {zoom: 6, center: centerposition};
@@ -1289,7 +1254,7 @@ $(".asset_mode .btn").click(function() {
             }
             addMarker(event.latLng);
         });
-        var markers = [];
+        //var markers = [];
         for (var i in raw_markers) {
             (function (i) {
                 var marker_details = raw_markers[i]

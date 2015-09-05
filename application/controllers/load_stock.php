@@ -221,6 +221,39 @@ class load_stock extends CI_Controller
   		echo $data['result'];
     }
 
+    public function ajax_raw_markers(){
+
+	  $ids = $this->input->get('ids');
+	  //echo $ids; 
+	  //$string = "1,2,3,4,5";
+	  //$int_array = array_map("intval", explode(",", $string));
+	  $ids = array_map("intval", explode(",", $ids));
+	  //$ids = explode($ids, ',');
+	  //print_r($int_array);
+	  //print_r(expression)
+	  //print_r($ids); exit;
+	  $user_id =$user_id = $this->session->userdata('user_id'); 
+	  $row = 0;
+	  $this->datatables
+	  	->where('use_id', $user_id)
+	  	//->where('ass_id', 28)
+	    ->select("(@cnt := @cnt + 1) as `DT_RowId`, ass_id, ass_id as asset_id, ass_name, ass_description, 
+		position, latitude, longitude, ass_status, ass_date, asset.mec_id,  asset.mec_id as med_id, media_categories.description, ass_is_mall, 0 as mall_id ",false)
+	    ->from('asset')
+	    ->where_in('ass_id', $ids)
+	    ->join('media_categories', 'media_categories.mec_id = asset.mec_id');
+	    //->select('country')
+	    //->join('tbl_states', 'tbl_profile.state_id = tbl_states.id')
+	    //->select('state');
+	    //->add_column('view', '<a href="' . base_url() . 'admin/profiles/view/$1"><img src="' . base_url() . 'assets/images/admin/vcard.png" alt="View" title="View" /></a>', 'id')
+	    //->add_column('edit', '<a href="' . base_url() . 'admin/profiles/edit/$1"><img src="' . base_url() . 'assets/images/admin/vcard_edit.png" alt="Edit" title="Edit" /></a>', 'id')
+	    //->add_column('delete', '<a href="' . base_url() . 'admin/profiles/delete/$1"><img src="' . base_url() . 'assets/images/admin/vcard_delete.png" alt="Delete" title="Delete" /></a>', 'id');
+
+  		$data['result'] = $this->datatables->generate('raw_markers');
+  		//echo $this->db->last_query();
+  		echo $data['result'];
+    }
+
 	public function spec_sheet($asset_name="", $asset_ref="", $asset_description="")
 	{
 		//get the uploaded regions

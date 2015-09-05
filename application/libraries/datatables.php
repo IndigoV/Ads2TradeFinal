@@ -352,6 +352,12 @@
           return json_encode($sOutput);
         else
           return $this->jsonify($sOutput);
+      } elseif ($output == 'raw_markers'){
+        $sOutput = $aaData;
+        if($charset == 'utf-8')
+          return json_encode($sOutput);
+        else
+          return $this->jsonify($sOutput);
       }
       else
         return array('aaData' => $aaData);
