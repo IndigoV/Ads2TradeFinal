@@ -209,7 +209,7 @@
                   <div class="bs-example bs-example-tabs">
                     <ul id="myTab" class="nav nav-tabs" role="tablist">
                       <li class="active"><a href="#newsfeed" role="tab" data-toggle="tab">Newsfeed</a></li>
-                      <li><a href="#campaigns" role="tab" data-toggle="tab">Campaigns</a></li>
+                      <li><a href="#campaigns_list" role="tab" data-toggle="tab">Campaigns</a></li>
                       <li><a href="#activities" role="tab" data-toggle="tab">Activities</a></li>
                     </ul>
 
@@ -236,7 +236,7 @@
                         </div>
                       </div>
 
-                      <div class="tab-pane fade in" id="campaigns">
+                      <div class="tab-pane fade in" id="campaigns_list">
 					  <?php
 						$sql = "SELECT * FROM system_events WHERE event_type in(3) ORDER BY event_date DESC";
 						$select = $this->db->query($sql);
