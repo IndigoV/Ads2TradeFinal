@@ -280,7 +280,23 @@ if($user_type == 2 || $user_type == 3 || $user_type > 0){
 			var campaign_id = "<?php echo $this->input->get('id'); ?>";
 			var comments = $('#status_comment').val();
 			var new_status = $('#workflow_new_status').val();
+			var invoice_amount = $('#invoice_amount').val();
 			var datetime = $('#workflow_datetime').val();
+			var invoice_type = 'N/A';
+
+			if(new_status == 9 || new_status == 11) {
+				if(new_status == 9){
+					invoice_type = 'Deposit Invoice';
+				} else {
+					invoice_type = 'Balance Invoice';
+				}
+				// invoice statuses
+				if (invoice_amount <= 0) {
+					alert('Please enter an invoice amount for the '+invoice_type);
+					$('#invoice_amount').focus();
+					return false;
+				}
+			}
 
             if (comments == ''){            
               commentIsOK = false;
@@ -293,7 +309,7 @@ if($user_type == 2 || $user_type == 3 || $user_type > 0){
 	            $.ajax({
 	                type: 'post',  //post method
 	                url: workflow_url,   
-	                data: {'campaign_id':campaign_id,'comments':comments,'new_status':new_status,'datetime':datetime},
+	                data: {'campaign_id':campaign_id,'comments':comments,'new_status':new_status,'datetime':datetime, 'invoice_type':invoice_type,'invoice_amount':invoice_amount},
 	                success: function(data, status) {
 	                    $('#edit').modal('hide');
 	                    //Modal Message here
@@ -1381,6 +1397,12 @@ $(".chkAssetStatus").click(function(){
 	</div>
 	<div class="modal-body">
 		<div class="form-group">
+			<label>Invoice Amount</label>
+			<input type="text" class="form-control" placeholder="Enter invoice amount" name="invoice_amount" id="invoice_amount" />
+		</div>
+
+		<div class="form-group">
+			<label>Comments</label>
 			<textarea rows="4" class="form-control" placeholder="Enter your comments here" id="status_comment"></textarea>
 		</div>
 	</div>

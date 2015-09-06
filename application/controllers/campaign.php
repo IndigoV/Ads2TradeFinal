@@ -240,21 +240,48 @@ switch($i){
 		
 		$user_id = $this->session->userdata('user_id');
 		$campaign_id = $this->input->post('campaign_id');
+		$comments = $this->input->post('comments');
+		$invoice_amount = $this->input->post('invoice_amount');
+		$invoice_type = $this->input->post('invoice_type');
+		$new_status = $this->input->post('new_status');
 
 		$workflow_status_record = array(
 			'campaign_id' => $campaign_id, 
 			'proposal_status_id' => $this->input->post('new_status'), 
 			'user_id' => $user_id, 
-			'comments' => $this->input->post('comments'), 
+			'comments' => $comments, 
 			'created_at' => date('Y-m-d H:j:s'),
 			'updated_at' => date('Y-m-d H:j:s')
 			);
 
-
 		  $id = $this->campaign->updateWorkflowStatus($workflow_status_record);
 
-		// Notifications
-	    //System Events
+		  //invoice details
+	      if($new_status == 9 || $new_status == 11){
+
+	      	      $invoice = array();
+	      	      $invoice['asset_id']    = "";
+	      	      $invoice['owner_id']    = "";
+	      	      //No agent_id/operator ( only applies to campaigns ??)          
+	      	      $invoice['campaign_id'] = $campaign_id;
+	      	      $invoice['description'] = 'Campaign '.$invoice_type .' - '.$comments;
+	      	      $invoice['amount']      = $this->input->post('invoice_amount');
+	      	      $invoice['customer_id'] = $user_id; //TODO: get advertiser id
+	      
+	      	      $this->db->insert('invoice', $invoice);
+	      	      $invoice_no = $this->db->insert_id();
+	      
+	      	      //Maybe Also insert into system events log type 1 event
+	      	      $event_object_type = 7; //Invoice
+	      	      $this->events->log_event($user_id, $id, date('Y-m-d H:j:s'), "New invoice ($invoice_type):$invoice_no created for $invoice_amount", $event_object_type);		
+
+	      		  $event_object_type = 3; //Campaign
+	      		  $this->events->log_event($user_id, $campaign_id, date('Y-m-d H:j:s'), "New invoice ($invoice_type):$invoice_no created for $invoice_amount", $event_object_type);	      	      		  
+	      
+	      }		
+	      
+	      // Notifications
+	      //System Events
 	      $event_object_type = 3; //Campaign
 	      $this->events->log_event($user_id, $campaign_id, date('Y-m-d H:j:s'), "Campaign Workflow Status Updated ", $event_object_type);
 
