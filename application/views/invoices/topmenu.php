@@ -13,6 +13,9 @@ NOTE: Blessed - 18.08.2015
 
     <!-- Media Category -->
 	<form name="filter_invoice_form" method="post">
+    <div class="media_owners_select" style="margin-top:10px; margin-left:10px;">
+      <input class="form-control" type="text" name="text_filter" id="text_filter" placeholder="Enter Invoice # or description" >
+    </div>
     <li>
       <a href="#">Status <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
 	  <?php
