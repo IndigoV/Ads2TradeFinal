@@ -1,23 +1,17 @@
-<style type="text/css">
 
-#divInvoice .modal .modal-dialog{ 
-  width: 90%; 
-  width: 900px;
-}   
-#frmInvoice .modal-body{
-    overflow-y: scroll;
-    height: 400px;
-}    
-
-</style>
-
-        <div class="breadcrumbs">
+	   <div class="breadcrumbs">
           <h1>
             <span class="glyphicon glyphicon-list-alt"></span> Invoices
           </h1>
         </div>
-
-        
+		<div>
+		<?php 
+			$user_type = $this->session->userdata('user_type');
+			if($user_type == 2 || $user_type == 3 || $user_type > 0){
+			  $this->load->view('invoices/topmenu');
+			}
+		?>
+        </div>
 
         <div class="main">
           
@@ -27,8 +21,8 @@
                     <th>Number</th>
                     <th>Date</th>
                     <th>Description</th>
-                    <th align="right">Amount.</th>
-                    <th>.Status</th>
+                    <th align="left">Amount</th>
+                    <th>Status</th>
                     <th></th>
                 </tr>
             </thead>
@@ -45,7 +39,7 @@
                             <td><?php echo $invoice_line->id; ?></td>
                             <td><?php echo $invoice_line->datetime; ?></td>
                             <td><?php echo $invoice_line->description; ?></td>
-                            <td align="right"><?php echo number_format($invoice_line->amount,2); ?></td>
+                            <td align="left"><?php echo number_format($invoice_line->amount,2); ?></td>
                             <td>
                                 <?php
                                 if($invoice_line->status > 0){
