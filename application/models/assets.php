@@ -959,6 +959,7 @@ function getAssetDetailsm()
 	                $increment = $rows->increment;
 	                $auction_id = $rows->id;
 	                $status = $rows->status;
+	                $status_details = $rows->ass_status_detail;
 	                $upd_url = $rows->upd_url;
 
 					$jsonAsset['ass_id'] = $ass_id;
@@ -972,6 +973,8 @@ function getAssetDetailsm()
 	                $jsonAsset['ass_city'] = $rows->ass_city;
 	                $jsonAsset['position'] = $rows->position;
 	                $jsonAsset['status'] = $status;
+	                $jsonAsset['ass_status'] = $status;
+	                $jsonAsset['ass_status_detail'] = $status_details;
 	                $jsonAsset['asset_image'] = $upd_url;
 	              
 	                if ($current_bid>0){

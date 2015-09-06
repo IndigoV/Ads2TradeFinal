@@ -87,12 +87,14 @@ class auction extends CI_Model {
           //$ass_id = $_POST['ass_id'];
           //$ass_id = $this->input->post_get('asst_id');
           $ass_id = isset($_REQUEST['auction_id'])?$_REQUEST['auction_id']:0;
+          $asset_id = $this->input->get('asst_id'); //asset id
           if (!isset($ass_id)){
              $ass_id = $_REQUEST['auction_id'];
           }
 
           if (isset($_REQUEST['approve'])) {
            $this->db->query("Update `auctions` set status = '1' where id ='$ass_id'" );
+           $this->db->query("Update `asset` set ass_status = '1', ass_status_detail=1 where ass_id ='$asset_id'" ); //update asset detail
            $action = 'approved';    //for event log
           }
 

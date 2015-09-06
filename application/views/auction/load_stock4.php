@@ -1903,6 +1903,9 @@ $("#frmAssetOptions .opSpecsheet").click(function() {
        var asset_address = jsonAsset.ass_street_address + ", " + jsonAsset.ass_city;
        var availability = "";
        if(jsonAsset.status == 1 || jsonAsset.ass_status > 0){
+       
+       	availability = " Inactive "; 
+
        	if (jsonAsset.ass_status_detail == 1 ){
        		availability = " In Active Auction "; 	
        		active = 0;
@@ -1912,19 +1915,23 @@ $("#frmAssetOptions .opSpecsheet").click(function() {
        	    availability = " In Active Campaign "; 
        	    active = 0;
        	    opaction = "Activate";
-       	}
+       	} 
        	if(jsonAsset.ass_status_detail == 3 ) {
        	    availability = " Manually Deactivated "; 
        	    active = 0;
        	    opaction = "Activate";
-       	}
-
-       	availability = " Inactive "; 
+       	} 
 
        } else {
         availability = " Available "; 
         active = 1;
         opaction = "Deactivate";
+       }
+
+       if(jsonAsset.status == null || jsonAsset.ass_status == null){
+        	availability = " Available "; 
+        	active = 1;
+        	//opaction = "Deactivate";       	
        }
 
        if(asset_img !="" && asset_img != null){
@@ -1947,8 +1954,16 @@ $("#frmAssetOptions .opSpecsheet").click(function() {
         data-price="<?php echo $total; ?>"
       */       
        //Create auction button
-       $("#frmAssetOptions .opAuction").attr("data-target","#addAuctionCart");
-       $("#frmAssetOptions .opAuction").attr("data-toggle","modal");
+       if(jsonAsset.status == 1 || jsonAsset.ass_status > 0){
+       	$("#frmAssetOptions .opAuction").html(availability);
+       	$("#frmAssetOptions .opAuction").removeAttr("data-target");
+       	$("#frmAssetOptions .opAuction").removeAttr("data-toggle");        	
+       	$("#frmAssetOptions .opAuction").attr("onclick","alert('Asset already on Auction\n\nYou cannot add this Asset to an Auction.')");
+   	   } else {
+       	$("#frmAssetOptions .opAuction").attr("data-target","#addAuctionCart");
+       	$("#frmAssetOptions .opAuction").attr("data-toggle","modal");   	
+       	$("#frmAssetOptions .opAuction").removeAttr("onclick");        	   	
+   	   }
        $("#frmAssetOptions .opAuction").attr("data-id",AssetId);
        $("#frmAssetOptions .opAuction").attr("data-name",asset_name);
        $("#frmAssetOptions .opAuction").attr("data-price",0);
