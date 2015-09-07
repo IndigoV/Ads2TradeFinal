@@ -14,8 +14,12 @@ NOTE: Blessed - 18.08.2015
     <!-- Media Category -->
 	<form name="filter_invoice_form" method="post">
     <div class="media_owners_select" style="margin-top:10px; margin-left:10px;">
-      <input class="form-control" type="text" name="text_filter" id="text_filter" placeholder="Enter Invoice # or description" >
+      <input class="form-control" type="text" name="text_filter" id="text_filter" onblur="document.filter_invoice_form.submit()" placeholder="Enter Invoice # or description" >
     </div>
+	<?php
+	$invoice_no_description = $_POST['text_filter'];
+	//echo $invoice_no_description."****";
+	?>
     <li>
       <a href="#">Status <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
 	  <?php
@@ -71,6 +75,139 @@ NOTE: Blessed - 18.08.2015
         </div>
       </div>
     </li>
+	   <li>
+      <a href="#">Dates <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+	  <?php
+	  $date1 = $_POST['date1'];
+	  //$filter_display = "";
+	  $this->session->set_userdata("value9", $date1);
+	  $my_value9 = $this->session->userdata('value9');	  
+	  echo "<div style='margin-top:-2px;'>".$my_value9."</div>";
+	  
+	  $date2 = $_POST['date2'];
+	  //$filter_display = "";
+	  $this->session->set_userdata("value10", $date2);
+	  $my_value10 = $this->session->userdata('value10');	  
+	  echo "<div style='margin-top:-2px;'>".$my_value10."</div>";
+	  
+	  $date3 = $_POST['date3'];
+	  //$filter_display = "";
+	  $this->session->set_userdata("value11", $date3);
+	  $my_value11 = $this->session->userdata('value11');	  
+	  echo "<div style='margin-top:-2px;'>".$my_value11."</div>";
+	  ?>
+	  </a>
+      <div class="drop_down dates">
+        <div class="d_content">
+          <table>
+            <tr>
+              <td>&nbsp;</td>
+              <td>On..</td>
+              <td width="30px">&nbsp;</td>
+              <td>Between</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+
+            <tr>
+              <td>Date</td>
+              <td><input class="form-control datepicker" name="date1" data-provide="datepicker"></td>
+              <td>Or</td>
+              <td><input class="form-control datepicker" name="date2" data-provide="datepicker"></td>
+              <td><input class="form-control datepicker" name="date3" data-provide="datepicker"></td>
+            </tr>
+          </table>
+        </div>
+        <div class="d_buttons">
+          <center>
+            <a href="#" class="btn btn-primary" onclick="document.filter_invoice_form.submit()">Search</a>
+            <a href="#" class="btn btn-primary">Cancel</a>
+          </center>
+        </div>
+      </div>
+    </li>
+	<li>
+      <a href="#">Amount <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+	  <?php
+	  $amount1 = $_POST['amount1'];
+	  //$filter_display = "";
+	  $this->session->set_userdata("value6", $amount1);
+	  $my_value6 = $this->session->userdata('value6');	  
+	  echo "<div style='margin-top:-2px;'>".$my_value6."</div>";
+	  
+	  $amount2 = $_POST['amount2'];
+	  //$filter_display = "";
+	  $this->session->set_userdata("value7", $amount2);
+	  $my_value7 = $this->session->userdata('value7');	  
+	  echo "<div style='margin-top:-2px;'>".$my_value7."</div>";
+	  
+	  $amount3 = $_POST['amount3'];
+	  //$filter_display = "";
+	  $this->session->set_userdata("value8", $amount3);
+	  $my_value8 = $this->session->userdata('value8');	  
+	  echo "<div style='margin-top:-2px;'>".$my_value8."</div>";
+	  ?>
+	  </a>
+      <div class="drop_down dates">
+        <div class="d_content">
+          <table>
+            <tr>
+              <td>&nbsp;</td>
+              <td>Amount</td>
+              <td width="30px">&nbsp;</td>
+              <td>Between</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+
+            <tr>
+              <td>Amount</td>
+              <td><input class="form-control" name="amount1" ></td>
+              <td>Or</td>
+              <td><input class="form-control" name="amount2"></td>
+              <td><input class="form-control" name="amount3"></td>
+            </tr>
+          </table>
+        </div>
+        <div class="d_buttons">
+          <center>
+            <a href="#" class="btn btn-primary" onclick="document.filter_invoice_form.submit()">Search</a>
+            <a href="#" class="btn btn-primary">Cancel</a>
+          </center>
+        </div>
+      </div>
+    </li>
 	</form>
   </ul>
 </div>
+<script type="text/javascript">
+  var campaign_id = '<?php echo isset($GET['id'])?$GET['id']:0; ?>';
+
+  //Media Owner filter changed
+  //filter_media_owner
+
+  //Contract filter changed
+  $('#filter_contract').on('change', function() {
+    var campaign_filter_text = this.options[this.selectedIndex].text;
+    $('#selected_filter_contract').html(campaign_filter_text);
+    campaign_id = this.value; 
+    window.location.href = '<?php echo site_url('campaign/setup_topmenu_filters/?id='); ?>' + campaign_id + '&ct=' + campaign_filter_text;
+  });
+
+  // Datepicker options
+  $('.datepicker').datepicker({
+      format: 'mm/dd/yyyy',
+      startDate: '-3d'
+  });
+
+  // Search/Filter button clicked
+  $('#btnAdvSearch').on('click',function(){
+  	//alert('filtering ... ');
+	$('#frmTopFilter').submit();
+  });
+
+  $('#btnCategorySearch').on('click',function(){
+        $('#frmTopFilter').submit();
+  });
+
+</script>
