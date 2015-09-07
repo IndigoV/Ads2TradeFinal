@@ -1,7 +1,7 @@
 <?php
 				$user_id = $this->session->userdata('user_id');
 					
-                        $this->db->where("user_type_id", '1');
+                        $this->db->where("user_type_id", '3');
                          $this->db->select('*');
                         $this->db->from('news');
                         $this->db->join('news_group_access', 'news_group_access.news_id = news.id');
@@ -32,16 +32,14 @@
                 $this->db->where('cam_status', '0');
                 $select_query_cam = $this->db->get('campaign');
                 $cam_am = 0;
-                 foreach ($select_query_cam->result() as $r){
-				$cam_am=$r->cam_budget+ $cam_am;
-
-		}
+                foreach ($select_query_cam->result() as $r){
+                    $cam_am=$r->cam_budget+ $cam_am;
+                }
                 $cam_amt = 0;
                 $select_query_camt = $this->db->get('campaign');
-                foreach ($select_query_camt->result() as $r){
-				$cam_amt=$r->cam_budget+ $cam_amt;
-
-		}
+                foreach ($select_query_camt->result() as $r) {
+                    $cam_amt=$r->cam_budget+ $cam_amt;
+                }
 
 
                 $this->db->where("watch_list.status", '1');
@@ -59,10 +57,10 @@
                 $bb = 0;
                 $cc = 0;
                  foreach ($select_query5->result() as $row1){
-				$bb=$row1->buy_now + $bb;
-                                $cc=$row1->current_bid + $cc;
+                     $bb=$row1->buy_now + $bb;
+                     $cc=$row1->current_bid + $cc;
 
-		}
+                }
 
 
 
@@ -91,7 +89,7 @@
                       //  $this->db->order_by("bidwhen", "desc");
                         $this->db->limit(1);
                         $this->db->select('*');
-		        $this->db->from('bids');
+		                $this->db->from('bids');
                         $this->db->join('auctions','bids.auction = auctions.id');
                         $this->db->join('asset','asset.ass_id = auctions.ass_id');
                         $this->db->join('media_category','media_category.mec_id = asset.mec_id', 'left outer');
@@ -99,11 +97,10 @@
                         $select_query2 = $this->db->get();
                         $won_bids = 0;
                         $cwon_bids = 0;
-                         foreach ($select_query2->result() as $row3){
-				$won_bids=$row3->buy_now + $won_bids;
-                                $cwon_bids=$row3->current_bid + $cwon_bids;
-
-		}
+                         foreach ($select_query2->result() as $row3) {
+                             $won_bids=$row3->buy_now + $won_bids;
+                             $cwon_bids=$row3->current_bid + $cwon_bids;
+                        }
 
 
 
