@@ -1025,8 +1025,8 @@ Hidden field to ghold currently selected asset id
 	//totalRecords = arrRows.page.len();
 	//console.log('page size 2:' + totalRecords + ':' + $('#campaign-grid').DataTable().data()[0]);
 
-    dataTable.addColumn({ type: 'string', id: 'Position' });
-    dataTable.addColumn({ type: 'string', id: 'Name' });
+    dataTable.addColumn({ type: 'string', id: 'Campaign' });
+    dataTable.addColumn({ type: 'string', id: 'Status' });
     dataTable.addColumn({ type: 'date', id: 'Start' });
     dataTable.addColumn({ type: 'date', id: 'End' });
 
@@ -1101,7 +1101,10 @@ Hidden field to ghold currently selected asset id
 	        timeline: { groupByRowLabel: false }
 	    }
 
-    chart.draw(dataTable, options);
+	// group data to remove duplicate rows    
+	var groupedData = google.visualization.data.group(dataTable, [0, 1, 2, 3], []);
+	    
+    chart.draw(groupedData, options);
   }
 
 </script>
