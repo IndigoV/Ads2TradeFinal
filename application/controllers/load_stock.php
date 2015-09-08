@@ -48,7 +48,7 @@ class load_stock extends CI_Controller
 
         $user_id = $this->session->userdata('user_id'); 
         $media_category['media_category'] = $this->media_category->getMediaCat();
-        $asset['asset'] = $this->assets->getAssetByuserId($user_id);	
+        $asset['asset'] = $this->assets->getOutdoorAssetTimelinesByuserId($user_id);	//now get timeline details if assets are on active campaigns as well, replaces getAssetByuserId
         $med['med'] = $this->assets->getMediaCat();
         
         //$data1['mmm'] = $this->assets->getAssetDetails1(); 

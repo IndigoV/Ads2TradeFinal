@@ -538,6 +538,13 @@ $asset_type = $this->input->get('type'); //outdoor or indoor
                       <div class="tab-pane fade in" id="gantt_view">
                       	<div class="col-xs-12">
                       	<br>
+                      	<h4 class="h4">List of Assets that are on the Workflow</h4>
+                      	<br>
+                      	<div class="row" style="background: #f6f6f6;">
+                      		<br>
+                      		<div id="timeline" style="height: 500px; width:600px; display: block; margin: 0 auto;"></div>                      		
+                      	</div>
+                      		<!--
                       		<table width="90%" align="center">
                       			<thead>
                       				<tr>
@@ -578,10 +585,11 @@ $asset_type = $this->input->get('type'); //outdoor or indoor
 	                      						<div>
 	                      						<button class="btn btn-primary">Reload Chart</button>
 	                      						</div>
-                                    <!-- GanttView Div -->
+
+                            
                                     <div id="ganttChart"></div>
                                     <br/><br/>
-                                    <!-- GanttView Messages Div -->
+                            
                                     <div id="eventMessage"></div>
                       						</center>
                       					</th>
@@ -593,10 +601,12 @@ $asset_type = $this->input->get('type'); //outdoor or indoor
                       						<br><br>
                       						<div id="gantt_chart" style="heigh:300px; width:90%; border: dotted thin blue; ">
                       							<span style="heigh:300px;">
-                      							<?php
+                      							<?php 
+                      							/*
                       							for($i=0; $i<20; $i++){
                       								echo "<br>";	
                       							}	
+                      							*/
                       							?>
                       							</span>
                       						</div>
@@ -607,6 +617,8 @@ $asset_type = $this->input->get('type'); //outdoor or indoor
                       				</tr>
                       			</tbody>
                       		</table>
+                      		-->
+
                       	</div>
                       </div>
                       <!--
@@ -991,6 +1003,109 @@ Hidden field to ghold currently selected asset id
 -->
 <input type="hidden" name="selected_asset_id" id="selected_asset_id" value="0">
 
+<!-- Google Timeline Component -->
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+  
+  google.load("visualization", "1", {packages:["timeline"]});
+  
+  google.setOnLoadCallback(drawChart);
+
+  function drawChartDummy(){
+  	//dummy, do nothing
+  }
+
+  function drawChart() {
+    var container = document.getElementById('timeline');
+    var chart = new google.visualization.Timeline(container);
+    var dataTable = new google.visualization.DataTable();
+
+	//Get Current Page Items for use in Calendar and Timeline Views
+	//arrRows = $('#campaign-grid').DataTable().data();
+	//totalRecords = arrRows.page.len();
+	//console.log('page size 2:' + totalRecords + ':' + $('#campaign-grid').DataTable().data()[0]);
+
+    dataTable.addColumn({ type: 'string', id: 'Position' });
+    dataTable.addColumn({ type: 'string', id: 'Name' });
+    dataTable.addColumn({ type: 'date', id: 'Start' });
+    dataTable.addColumn({ type: 'date', id: 'End' });
+
+		//Add Rows
+		<?php
+		$found_one_time_entries = false;
+		foreach ($asset as $row) {
+			if( is_null($row->from_date) && is_null($row->to_date)){
+				//make sure asset is on workflow timeline
+
+			} else {
+				$found_one_time_entries = true;					
+				# code...
+				//extract day, month (0 based since we will put it into javascript) and year from date
+				// Start Date
+				$start_day = date('d',strtotime($row->from_date));
+				$start_mon = date('m',strtotime($row->from_date))-1;
+				$start_year = date('Y',strtotime($row->from_date));
+				// End Date
+				//$ends = date('D M d Y H:i:s O',strtotime($row->to_date));
+				$end_day = date('d',strtotime($row->to_date));
+				$end_mon = date('m',strtotime($row->to_date))-1;
+				$end_year = date('Y',strtotime($row->to_date));
+			
+					?>
+						dataTable.addRow(['<?php echo $row->cam_title; ?>', '<?php echo $row->campaign_status;?>',
+			                new Date(<?php echo $start_year; ?>,<?php echo $start_mon; ?>,<?php echo $start_day; ?>), 
+			                new Date(<?php echo $end_year; ?>,<?php echo $end_mon; ?>,<?php echo $end_day; ?>)]);
+			
+			  			<?php				
+					} //end if asset on workflow
+
+		} //end foreach
+
+		if($found_one_time_entries == false){
+
+				// Start Date  (Today)
+				$start_day = date('d');
+				$start_mon = date('m')-1;
+				$start_year = date('Y');
+
+				// End Date (7 days from today)
+				//$ends = date('D M d Y H:i:s O',strtotime($row->to_date));
+				$end_day = date('d',strtotime("+7 day"));
+				$end_mon = date('m',strtotime("+7 day"))-1;
+				$end_year = date('Y',strtotime("+7 day"));
+
+			?>
+				dataTable.addRow(['------------------', ' ****************                           ***********************',
+	                new Date(<?php echo $start_year; ?>,<?php echo $start_mon; ?>,<?php echo $start_day; ?>), 
+	                new Date(<?php echo $end_year; ?>,<?php echo $end_mon; ?>,<?php echo $end_day; ?>)]);	
+
+				dataTable.addRow(['Workflow Assets', 'You do not have any assets on workflows yet',
+	                new Date(<?php echo $start_year; ?>,<?php echo $start_mon; ?>,<?php echo $start_day; ?>), 
+	                new Date(<?php echo $end_year; ?>,<?php echo $end_mon; ?>,<?php echo $end_day; ?>)]);			
+
+				dataTable.addRow(['------------------', ' ****************                           ***********************',
+	                new Date(<?php echo $start_year; ?>,<?php echo $start_mon; ?>,<?php echo $start_day; ?>), 
+	                new Date(<?php echo $end_year; ?>,<?php echo $end_mon; ?>,<?php echo $end_day; ?>)]);					
+			<?php
+		}
+		?>
+
+	    // Calculate height based on number of line items
+	    var rowHeight = 41;
+	    var chartHeight = (dataTable.getNumberOfRows() + 1) * rowHeight;
+
+	    var options = {
+	        height: chartHeight,
+	        width: 800,
+	        forceIFrame: true,
+	        timeline: { groupByRowLabel: false }
+	    }
+
+    chart.draw(dataTable, options);
+  }
+
+</script>
+
 <script type="text/javascript" language="javascript" class="init">
 
 //globals for tracking asset and activation function
@@ -1030,10 +1145,13 @@ $(document).ready(function() {
 	    //alert( 'Showing page: '+info.page+' of '+info.pages );
 	    var ids = getAllAssetsOnCurrentPage();
 
+	    //Redraw the Map
 		if(first_time == false){
 	    	deleteMarkers();
 	    	redrawMap(ids);
 		}
+
+		//Redraw the timeline
 
 	} );
 

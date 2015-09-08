@@ -1425,6 +1425,49 @@ function getAssetDetailsm()
 	function insertNewAsset($rate_array){
 		$this->db->insert('rate_card', $rate_array);
 	}
-	
+
+	//
+	// Get Assets and Workflow Timelines By User ID
+	// Modification of getAssetByuserId
+	//
+    function getOutdoorAssetTimelinesByuserId($user_id, $is_mall=0){
+    	
+    	//Also return mall_id (if any)
+    	$query = $this->db->query("
+    		SELECT DISTINCT
+				campaign.cam_title,
+				proposal_status.prs_description AS campaign_status,
+				rfp_for_submission_assets_selected.accepted_by_operator,
+				rfp_for_submission_assets_selected.accepted_by_media_owner,
+				rfp_for_submission_assets_selected.from_date,
+				rfp_for_submission_assets_selected.to_date,
+				rfp_for_submission_assets_selected.completed,
+				rfp_for_submission_assets_selected.asset_id,
+				asset.*, mall.mall_id
+			FROM
+				rfp_for_submission_assets_selected
+			INNER JOIN rfp_for_submission ON rfp_for_submission.rfp_for_submission_id = rfp_for_submission_assets_selected.rfp_for_submission_id
+			INNER JOIN campaign ON campaign.cam_id = rfp_for_submission.campaign_id
+			INNER JOIN proposal_status ON proposal_status.pro_status_id = campaign.pro_status_id
+			RIGHT JOIN asset ON asset.ass_id = asset_id
+			LEFT OUTER JOIN mall on mall.ass_id = asset.ass_id 
+			WHERE asset.use_id = '$user_id'
+				AND ass_name IS NOT NULL 
+				AND ass_description IS NOT NULL 
+				AND ass_is_mall <> 1
+			ORDER BY asset_id
+    		");
+    	
+        if($query->num_rows > 0){
+            foreach ($query->result() as $row){
+                $data[] = $row;
+            }
+            return $data;
+        }
+        else {
+            return false;
+        }
+    }
+
 }
 /* end of assets.php */
