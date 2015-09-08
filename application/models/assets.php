@@ -1469,5 +1469,55 @@ function getAssetDetailsm()
         }
     }
 
+    // Asset Filtering
+    /**
+	Indoor - 1
+	mec_id: 1,10,15,16,24,25
+
+	Outdoor - 2
+	mec_id: 1,2,3,4,5,6,7,8,9,13,14,15,16,17,18,20,21
+
+	Rolling Media - 3
+	mec_id: 3,5,7,9,10,13,15,17,20,22,23,24
+
+	Print - 4
+	mec_id: 11,12
+
+	Other - 5
+	mec_id: 19,22,23
+    */
+    // Get All Assets for a given category
+    // Default to 2 = Outdoor Assets
+    function getAllCategoryAsset($user_id=0, $asset_category=2){
+
+    	if($user_id <= 0){
+    		$user_id = $this->session->userdata('user_id');
+    	}
+
+    	switch($asset_category){
+    		case 1: $array_mec_ids = array(1,10,15,16,24,25); break;
+    		case 2: $array_mec_ids = array(1,2,3,4,5,6,7,8,9,13,14,15,16,17,18,20,21); break;
+    		case 3: $array_mec_ids = array(3,5,7,9,10,13,15,17,20,22,23,24); break;
+    		case 4: $array_mec_ids = array(11,12); break;
+    		case 5: $array_mec_ids = array(19,22,23); break;
+    		default: $array_mec_ids = array(1,2,3,4,5,6,7,8,9,13,14,15,16,17,18,20,21);     		
+    	}
+    	
+    	$this->db->where_in('mec_id', $array_mec_ids);
+
+    	$this->db->where('use_id', $user_id);
+        $query = $this->db->get('asset');
+        //echo $this->db->last_query(); 
+        if($query->num_rows() > 0){
+            foreach ($query->result() as $row){
+                $data[] = $row;
+            }
+            return $data;
+        } else {
+            $query->free_result();
+            return false;
+        }
+    }    
+
 }
 /* end of assets.php */
