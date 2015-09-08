@@ -714,21 +714,15 @@ class new_campaign extends CI_Controller
             // get all assets in location
             $selectedAssets = $this->rfp_for_submission_assets_selected->getSelectedAssets($rfps[0]->rfp_for_submission_id, $this->session->userdata('user_id'));
         }
-//        echo 'this<pre>';
-//        print_r($allCampaignDetails);
-//        echo '</pre>';
-//        die();
+
         $allData['allCampaignDetails'] = $allCampaignDetails;
-//        $id = $this->session->userdata('id');
-//        // echo $id;
-        // get all assets from media to choose from
+
         $allAssets = array();
         for ($i = 0; $i < count($locations); $i++) {
             $locationsLatLngs = explode(",", $locations[$i]);
             $lat = $locationsLatLngs[0];
             $lng = $locationsLatLngs[1];
             $latLngAddress = $this->getAddressFromLatLong($lat, $lng);
-//            // echo $latLngAddress;
             $latLngAddressStuff = explode(",", $latLngAddress);
 
             if (isset($latLngAddressStuff[1])) {
@@ -744,7 +738,8 @@ class new_campaign extends CI_Controller
 
             $mainAddress = $city . ', ' . $country;
 //            // echo $mainAddress . '<br />';
-            $answer = $this->db->query("
+
+            $sql = "
             SELECT
             asset.ass_id,
             asset.ast_id,
@@ -790,8 +785,11 @@ class new_campaign extends CI_Controller
             asset
             INNER JOIN media_category ON asset.mec_id = media_category.mec_id
             WHERE
-            asset.med_id = " . $this->session->userdata('user_id') . "
-            HAVING distance < 12")->result();
+            asset.use_id = " . $this->session->userdata('user_id') . "
+            HAVING distance < 12";
+            $answer = $this->db->query($sql)->result();
+
+            //echo "<pre>" . print_r($sql, 1) . "</pre>"; exit();
 
             $allLocations = array();
             $tempAsset = array();
