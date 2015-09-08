@@ -1052,7 +1052,7 @@ Hidden field to ghold currently selected asset id
 				$end_year = date('Y',strtotime($row->to_date));
 			
 					?>
-						dataTable.addRow(['<?php echo $row->cam_title; ?>', '<?php echo $row->campaign_status;?>',
+						dataTable.addRow(['<?php echo ucwords($row->cam_title); ?>', '<?php echo ucwords($row->campaign_status);?>',
 			                new Date(<?php echo $start_year; ?>,<?php echo $start_mon; ?>,<?php echo $start_day; ?>), 
 			                new Date(<?php echo $end_year; ?>,<?php echo $end_mon; ?>,<?php echo $end_day; ?>)]);
 			

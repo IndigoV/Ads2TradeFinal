@@ -1455,7 +1455,7 @@ function getAssetDetailsm()
 				AND ass_name IS NOT NULL 
 				AND ass_description IS NOT NULL 
 				AND ass_is_mall <> 1
-			ORDER BY asset_id
+			ORDER BY cam_title, campaign_status, asset_id
     		");
     	
         if($query->num_rows > 0){
