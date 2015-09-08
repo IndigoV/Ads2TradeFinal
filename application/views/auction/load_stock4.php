@@ -1192,7 +1192,7 @@ function deleteMarkers() {
 //Print Buttons
 //prt_map,prt_tbl,prt_sum,prt_det
 $("#lblPrintMap").on('click',function(){
-	alert('Printing Map...');
+	//alert('Printing Map...');
   window.print();
 	//var map_canvas = $('#map-canvas');
 	//printContent('map-canvas');
@@ -1203,7 +1203,7 @@ $("#lblPrintMap").on('click',function(){
 });
 
 $("#lblPrintTable").on('click',function(){
-	alert('Printing Table...');
+	//alert('Printing Table...');
 	PrintElem('example_wrapper');
 	//var table_canvas = $('#table_div');
 	//console.log(table_canvas);	
@@ -1211,14 +1211,14 @@ $("#lblPrintTable").on('click',function(){
 });
 
 $("#lblPrintSummary").on('click',function(){
-	alert('Printing Summary...');
+	//alert('Printing Summary...');
 	//Get all selected assets
 	printSpecSheets();
 	//print table div
 });
 
 $("#lblPrintDetail").on('click',function(){
-	alert('Printing Detailed...');
+	//alert('Printing Detailed...');
 	//Get all selected assets
 	printSpecSheets();
 	//print table div
@@ -1257,7 +1257,7 @@ function printSpecSheets(detailed){
     } else {
         //alert(' Selected '+allSelected);
         var specSheetPage = "<?php echo site_url('auctions/spec_sheet_list?asset_ids='); ?>"+allSelected;
-        alert(specSheetPage);
+        //alert(specSheetPage);
         PopupURL(specSheetPage);
     	console.log(specSheetPage);	
     }
