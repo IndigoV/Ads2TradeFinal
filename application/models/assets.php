@@ -1027,13 +1027,48 @@ function getAssetDetailsm()
 
     function getAssetByuserId($user_id, $is_mall=0){
     	//Also return mall_id (if any)
-        $query = $this->db->query("
+		//Media Catergory
+		$media_cat  = $this->input->post('media_category');//duration
+		if(count($media_cat)>0 && !empty($media_cat)){
+			$media_cat_val = implode(',', $media_cat);
+			$condition .= " AND ( media_category.mec_id IN ($media_cat_val) ) ";
+		} 
+		//Media type
+		$media_types  = $this->input->post('media_type');//duration
+		if(count($media_types)>0 && !empty($media_types)){
+			$media_types_val = "'".implode("','", $media_types)."'";
+			$condition .= " AND ( master_medium_type.met_description IN ($media_types_val) ) ";
+		}  
+		//Auction Status
+		$auction_stats  = $this->input->post('auction_status');//duration
+		if(count($auction_stats)>0 && !empty($auction_stats)){
+			$auction_stats_val = "'".implode("','", $auction_stats)."'";
+			$condition .= " AND ( asset_status.asset_status IN ($auction_stats_val) ) ";
+		} 
+		//activeNotActive
+		$activeNotAct  = $this->input->post('activeNotActive');//duration
+		if(count($activeNotAct)>0 && !empty($activeNotAct)){
+			$activeNotAct_val = "'".implode("','", $activeNotAct)."'";
+			$condition .= " AND ( asset_status.asset_status IN ($activeNotAct_val) ) ";
+		} 
+		//media_status
+		$media_stats = $this->input->post('media_status');//duration
+		if(count($media_stats)>0 && !empty($media_stats)){
+			$media_stats_val = "'".implode("','", $media_stats)."'";
+			$condition .= " AND ( asset_status.asset_status IN ($media_stats_val) ) ";
+		} 
+	
+			$query = $this->db->query("
         	SELECT asset.*, mall.mall_id FROM asset  
         	LEFT OUTER JOIN mall on mall.ass_id = asset.ass_id 
+			LEFT OUTER JOIN `media_category` ON `asset`.mec_id = `media_category`.mec_id
+			LEFT OUTER JOIN `master_medium_type` ON `master_medium_type`.mam_id = `media_category`.mam_id
+			LEFT OUTER JOIN `asset_status` ON `asset`.asset_status_id = `asset_status`.asset_status_id
         	WHERE ass_name IS NOT NULL 
         		AND ass_description IS NOT NULL 
         		AND use_id = '$user_id'
-        		AND ass_is_mall='$is_mall'");
+        		AND ass_is_mall='$is_mall' $condition
+				");
         if($query->num_rows > 0){
             foreach ($query->result() as $row){
                 $data[] = $row;
@@ -1043,7 +1078,7 @@ function getAssetDetailsm()
         else {
             return false;
         }
-    }	
+    }		
 
     function getMallsByuserId($user_id){
     	//Also return mall_id (if any)

@@ -13,12 +13,27 @@ NOTE: Blessed - 18.08.2015
 	<form name="filter_form" method="post">
       <a href="#">Media Category <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
 	  <?php
-	  $mc = $_POST['media_category']; 
-	  $filter_display = "";
-	  foreach ($mc as $key=>$value1){
-		  $filter_display .= $value1.",";
+	$mc = $_POST['media_category'];
+	$mc2 = $_POST['media_category_hid'];
+	  if(count($mc)>0 && !empty($mc))
+	  {
+	
+		$mc_val = implode(',', $mc);
+		$mc_val2 = implode(',', $mc2);
+		if ($mc_val == "1,2,3,4,5,6,7,8,9,13,14,15,16,17,18,20,21"){
+			$mc_val = "Outdoor";
+		}elseif ($mc_val == "1,10,15,16,24,25"){
+			$mc_val = "Indoor";
+		}elseif ($mc_val == "5,7,9,10,13,15,17,20,22,23,24"){
+			$mc_val = "Rolling Media";
+		}elseif ($mc_val == "11,12"){
+			$mc_val = "Print";
+		}elseif ($mc_val == "19,22,23"){
+			$mc_val = "Other";
+		}else
+			$mc_val = $mc_val2;
 	  }
-	  echo "<br/><font color=white><div style='margin-top:-2px;'>".substr($value1, 0, 17)."...</div></font>"
+	  echo "<br/><font color=white><div style='margin-top:-2px;'>".substr($mc_val, 0, 17)."...</div></font>";
 	  ?>
       </a>
       <div class="drop_down">
@@ -28,31 +43,39 @@ NOTE: Blessed - 18.08.2015
 
           <div class="checkbox block">
             <label>
-              <input type="checkbox" class="mediaCategory" name="media_category[]" value="Outdoor"> Outdoor
+              <input type="checkbox" class="mediaCategory" name="media_category[]" value="1,2,3,4,5,6,7,8,9,13,14,15,16,17,18,20,21"> Outdoor
+			    <input type="hidden" class="mediaCategory" name="media_category_hid[]" value="Outdoor"> 
+			  
+			  <?php
+			  ?>
             </label>
           </div>
 
           <div class="checkbox block">
             <label>
-              <input type="checkbox" class="mediaCategory" name="media_category[]" value="Indoor"> Indoor
+              <input type="checkbox" class="mediaCategory" name="media_category[]" value="1,10,15,16,24,25"> Indoor
+			  <input type="hidden" class="mediaCategory" name="media_category_hid[]" value="Indoor">
             </label>
           </div>
 
           <div class="checkbox block">
             <label>
-              <input type="checkbox" class="mediaCategory" name="media_category[]" value="Rolling Media"> Rolling Media
+              <input type="checkbox" class="mediaCategory" name="media_category[]" value="3,5,7,9,10,13,15,17,20,22,23,24"> Rolling Media
+			  <input type="hidden" class="mediaCategory" name="media_category_hid[]" value="Rolling Media">
             </label>
           </div>
 
           <div class="checkbox block">
             <label>
-              <input type="checkbox" class="mediaCategory" name="media_category[]" value="Print"> Print
+              <input type="checkbox" class="mediaCategory" name="media_category[]" value="11,12"> Print
+			  <input type="hidden" class="mediaCategory" name="media_category_hid[]" value="Print">
             </label>
           </div>
           
           <div class="checkbox block">
             <label>
-              <input type="checkbox" name="media_category[]" value="Other"> Other
+              <input type="checkbox" name="media_category[]" value="19,22,23"> Other
+			   <input type="hidden" class="mediaCategory" name="media_category_hid[]" value="Other">
             </label>
           </div>
 
@@ -71,11 +94,11 @@ NOTE: Blessed - 18.08.2015
       <a href="#">Media Type <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
 	  <?php
 	  $mt = $_POST['media_type'];
-	  $filter_display = "";
-	  foreach ($mt as $key=>$value2){
-			$filter_display .= $value2.","; 
+	  if(count($mt)>0 && !empty($mt))
+	  {
+		$mt_val = implode(',', $mt);
 	  }
-	  echo "<div  style='margin-top:-2px; '>".substr($value2, 0, 17)."...</div>"
+	  echo "<div  style='margin-top:-2px; '>".substr($mt_val, 0, 17)."...</div>";
 	  ?>
       </a>
       <div class="drop_down">
@@ -138,14 +161,13 @@ NOTE: Blessed - 18.08.2015
       <a href="#">Auction Status <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
 	  <?php
 	  $as = $_POST['auction_status'];
-	  $filter_display = "";
-	  foreach ($as as $key=>$value3){
-			$filter_display .= $value3. ", ";  
+	  if(count($as)>0 && !empty($as))
+	  {
+		$as_val = implode(',', $as);
 	  }
-	  echo "<div style='margin-top:-2px;'>".substr($value3, 0, 17)."...</div>"
+	  echo "<div style='margin-top:-2px;'>".substr($as_val, 0, 17)."...</div>";
 	  ?>
       </a>
-
       <div class="drop_down">
         <div class="d_content">
           <a href="#">Select All</a> <span>|</span> <a href="#">Clear All</a>
@@ -183,11 +205,11 @@ NOTE: Blessed - 18.08.2015
       <a href="#">Active / Not Active <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
 	  <?php
 	  $active = $_POST['activeNotActive'];
-	  $filter_display = "";
-	  foreach ($active as $key=>$value4){
-			$filter_display .= $value4.", ";  
+	  if(count($active)>0 && !empty($active))
+	  {
+		$active_val = implode(',', $active);
 	  }
-	  echo "<div style='margin-top:-2px;'>".substr($value4, 0, 17)."...</div>"
+	  echo "<div style='margin-top:-2px;'>".substr($active_val, 0, 17)."...</div>";
 	  ?>
       </a>
       <div class="drop_down">
@@ -220,11 +242,11 @@ NOTE: Blessed - 18.08.2015
       <a href="#">Media Status <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
 	  <?php
 	  $ms = $_POST['media_status'];
-	  $filter_display = "";
-	  foreach ($ms as $key=>$value5){
-		 	$filter_display .= $value5.", "; 
+	  if(count($ms)>0 && !empty($ms))
+	  {
+		$ms_val = implode(',', $ms);
 	  }
-	  echo "<div style='margin-top:-2px;'>".substr($value5, 0,17)."...</div>";
+	  echo "<div style='margin-top:-2px;'>".substr($ms_val, 0,17)."...</div>";
 	  ?>
       </a>
 
@@ -267,7 +289,6 @@ NOTE: Blessed - 18.08.2015
     </li>
   </ul>
 </div>
-</form>
 <script type="text/javascript">
 
 $(document).ready(function() {
@@ -284,6 +305,37 @@ $(document).ready(function() {
     });
     
 });
+
+</script>
+<script type="text/javascript">
+  var campaign_id = '<?php echo isset($GET['id'])?$GET['id']:0; ?>';
+
+  //Media Owner filter changed
+  //filter_media_owner
+
+  //Contract filter changed
+  $('#filter_contract').on('change', function() {
+    var campaign_filter_text = this.options[this.selectedIndex].text;
+    $('#selected_filter_contract').html(campaign_filter_text);
+    campaign_id = this.value; 
+    window.location.href = '<?php echo site_url('campaign/workflow_details/?id='); ?>' + campaign_id + '&ct=' + campaign_filter_text;
+  });
+
+  // Datepicker options
+  $('.datepicker').datepicker({
+      format: 'mm/dd/yyyy',
+      startDate: '-3d'
+  });
+
+  // Search/Filter button clicked
+  $('#btnAdvSearch').on('click',function(){
+  	//alert('filtering ... ');
+	$('#frmTopFilter').submit();
+  });
+
+  $('#btnCategorySearch').on('click',function(){
+        $('#frmTopFilter').submit();
+  });
 
 </script>
 
