@@ -87,14 +87,12 @@ class auction extends CI_Model {
           //$ass_id = $_POST['ass_id'];
           //$ass_id = $this->input->post_get('asst_id');
           $ass_id = isset($_REQUEST['auction_id'])?$_REQUEST['auction_id']:0;
-          $asset_id = $this->input->get('asst_id'); //asset id
           if (!isset($ass_id)){
              $ass_id = $_REQUEST['auction_id'];
           }
 
           if (isset($_REQUEST['approve'])) {
            $this->db->query("Update `auctions` set status = '1' where id ='$ass_id'" );
-           $this->db->query("Update `asset` set ass_status = '1', ass_status_detail=1 where ass_id ='$asset_id'" ); //update asset detail
            $action = 'approved';    //for event log
           }
 
@@ -502,29 +500,35 @@ class auction extends CI_Model {
 
           //Setup user condition if any
           $condition = '';
+
           if($user_id>0){
-            $condition = " AND (au.use_id = '$user_id') ";
+            $condition .= " AND (au.use_id = '$user_id') ";
           }    
 
           //Setup condition based on filters (if any)
           //Ignore user id
           $condition = '';
+          
+          // Only show active current auctions
+          $condition .= " AND ( au.status=1 ) AND ( au.starts <= CURDATE()) AND ( au.ends >= CURDATE())";    
+          // 
+
           $mef_ids = $this->input->post('mef_id');//media family
           if(count($mef_ids)>0 && !empty($mef_ids)){
-              $mef_id_list = implode(',', $mef_ids);
+              $mef_id_list = "'".implode("','", $duration)."'";
               $condition .= " AND ( media_family.mef_id IN ($mef_id_list) ) ";
           }
 
           $mam_ids = $this->input->post('mam_id');//master media
           if(count($mam_ids)>0 && !empty($mam_ids)){
-              $mam_id_list = implode(',', $mam_ids);
+              $mam_id_list = "'".implode("','", $mam_ids)."'";
               $condition .= " AND ( master_medium_type.mam_id IN ($mam_id_list) ) ";
           }          
           
           $duration = $this->input->post('duration');//duration
           $mef_ids = $this->input->post('mef_id');//media family
           if(count($duration)>0 && !empty($duration)){
-              $duration_list = implode(',', $duration);
+              $duration_list = "'".implode("','", $duration)."'";
               $condition .= " AND ( au.duration IN ($duration_list) ) ";
           }                   
 
@@ -562,6 +566,11 @@ class auction extends CI_Model {
 
           //Setup condition based on filters (if any)
           $condition = '';
+
+          // Only show active current auctions
+          $condition .= " AND ( auctions.status=1 ) AND ( auctions.starts <= CURDATE()) AND ( auctions.ends >= CURDATE())";    
+          // 
+
           $mef_ids = $this->input->post('mef_id');//media family
           if(count($mef_ids)>0 && !empty($mef_ids)){
               $mef_id_list = implode(',', $mef_ids);
@@ -579,7 +588,38 @@ class auction extends CI_Model {
           if(count($duration)>0 && !empty($duration)){
               $duration_list = implode(',', $duration);
               $condition .= " AND ( auctions.duration IN ($duration_list) ) ";
-          }                   
+          }           
+			
+		//Media Catergory
+		$media_cat  = $this->input->post('media_category');//duration
+		if(count($media_cat)>0 && !empty($media_cat)){
+			$media_cat_val = implode(',', $media_cat);
+			$condition .= " AND ( media_category.mec_id IN ($media_cat_val) ) ";
+		} 
+		//Media type
+		$media_types  = $this->input->post('media_type');//duration
+		if(count($media_types)>0 && !empty($media_types)){
+			$media_types_val = "'".implode("','", $media_types)."'";
+			$condition .= " AND ( master_medium_type.met_description IN ($media_types_val) ) ";
+		}  
+		//Auction Status
+		$auction_stats  = $this->input->post('auction_status');//duration
+		if(count($auction_stats)>0 && !empty($auction_stats)){
+			$auction_stats_val = "'".implode("','", $auction_stats)."'";
+			$condition .= " AND ( asset_status.asset_status IN ($auction_stats_val) ) ";
+		} 
+		//activeNotActive
+		$activeNotAct  = $this->input->post('activeNotActive');//duration
+		if(count($activeNotAct)>0 && !empty($activeNotAct)){
+			$activeNotAct_val = "'".implode("','", $activeNotAct)."'";
+			$condition .= " AND ( asset_status.asset_status IN ($activeNotAct_val) ) ";
+		} 
+		//media_status
+		$media_stats = $this->input->post('media_status');//duration
+		if(count($media_stats)>0 && !empty($media_stats)){
+			$media_stats_val = "'".implode("','", $media_stats)."'";
+			$condition .= " AND ( asset_status.asset_status IN ($media_stats_val) ) ";
+		}
 
           $filter = $this->input->post('filter');//filter
           if($filter != ''){
@@ -607,7 +647,7 @@ class auction extends CI_Model {
 
           $query = $this->db->query("
               SELECT
-                asset.mec_id,
+					asset.mec_id,
                 Min(auctions.`starts`) AS `starts`, auctions.duration, Max(auctions.`ends`) AS `ends`, 
                 durations.description AS duration_label, media_categories.description AS mec_description,
                 Count(auctions.id) AS total
@@ -616,6 +656,8 @@ class auction extends CI_Model {
               INNER JOIN asset ON auctions.ass_id = asset.ass_id
               RIGHT OUTER JOIN durations ON durations.days = auctions.duration
               RIGHT OUTER JOIN media_categories ON asset.mec_id = media_categories.mec_id
+			  LEFT OUTER JOIN `media_category` ON `asset`.mec_id = `media_category`.mec_id
+			LEFT OUTER JOIN `asset_status` ON `asset`.asset_status_id = `asset_status`.asset_status_id
               LEFT JOIN master_medium_type ON master_medium_type.mam_id = media_categories.media_family_id
               LEFT JOIN media_family ON media_family.mef_id = master_medium_type.mef_id
               WHERE
@@ -644,6 +686,11 @@ class auction extends CI_Model {
 
       //Setup condition based on filters (if any)
       $condition = '';
+
+      // Only show active current auctions
+      $condition .= " AND ( auctions.status=1 ) AND ( auctions.starts <= CURDATE()) AND ( auctions.ends >= CURDATE())";  
+      // 
+
       $mef_ids = $this->input->post('mef_id');//media family
       if(count($mef_ids)>0 && !empty($mef_ids)){
           $mef_id_list = implode(',', $mef_ids);
@@ -661,7 +708,7 @@ class auction extends CI_Model {
       if(count($duration)>0 && !empty($duration)){
           $duration_list = implode(',', $duration);
           $condition .= " AND ( auctions.duration IN ($duration_list) ) ";
-      }                   
+      }   	    
 
       $filter = $this->input->post('filter');//filter
       if($filter != ''){
@@ -684,9 +731,10 @@ class auction extends CI_Model {
           RIGHT OUTER JOIN media_categories ON asset.mec_id = media_categories.mec_id
           LEFT JOIN master_medium_type ON master_medium_type.mam_id = media_categories.media_family_id
           LEFT JOIN media_family ON media_family.mef_id = master_medium_type.mef_id
+		  INNER JOIN `media_category` ON media_category.mef_id=media_family.mef_id
           WHERE
             1 
-            $condition
+            $condition 
         ");
 
       if(empty($query)) {
@@ -703,6 +751,11 @@ class auction extends CI_Model {
              
       //Setup condition based on filters (if any)
       $condition = '';
+
+      // Only show active current auctions
+      $condition .= " AND ( auctions.status=1 ) AND ( auctions.starts <= CURDATE()) AND ( auctions.ends >= CURDATE())";   
+      // 
+
       $mef_ids = $this->input->post('mef_id');//media family
       if(count($mef_ids)>0 && !empty($mef_ids)){
           $mef_id_list = implode(',', $mef_ids);
@@ -779,6 +832,10 @@ class auction extends CI_Model {
       $radius_search_condition = '';
       $lat = 0;
       $lng = 0;
+
+      // Only show active current auctions
+      $condition .= " AND ( auctions.status=1 ) AND ( auctions.starts <= CURDATE()) AND ( auctions.ends >= CURDATE())";    
+      // 
 
       //area filter if any is specified
       // if area is set then do a radius search on the given area name
@@ -876,7 +933,7 @@ SUBSTRING_INDEX(SUBSTRING_INDEX(position, ',', 2), ',', -1) as lng,
             1 
             AND asset.ass_id IS NOT NULL
             $condition
-            $radius_search_condition
+            $radius_search_condition 
         ");
 
       //echo $this->db->last_query(); 
@@ -1009,7 +1066,7 @@ SUBSTRING_INDEX(SUBSTRING_INDEX(position, ',', 2), ',', -1) as lng,
   }
 
     function getAssetBuyNowPrice($id) {
-        $query = $this->db->query("SELECT buy_now FROM auctions WHERE id = '" . $id ."'");
+        $query = $this->db->query("SELECT buy_now FROM auctions WHERE id = '" . $id ."' limit 1");
         //return $query->result()[0];
         foreach ($query->result() as $row){     
             return $row->buy_now;   

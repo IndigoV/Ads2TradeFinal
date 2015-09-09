@@ -29,10 +29,11 @@ class Malls extends CI_Controller {
 	
 	public function mall($mall_id = false) {
 		$user_id = $this->session->userdata('user_id');
+		$ASSET_CATEGORY_INDOOR = 1;
 
 		//$mall_assets = $this->Asset->getMallAssets();
-		$is_mall = 0; //only get assets that themselves are not the actual mall
-		$mall_assets = $this->Asset->getAllAsset($user_id, $is_mall);
+		$is_mall = 1; //only get assets that themselves are not the actual mall
+		$mall_assets = $this->Asset->getAllCategoryAsset($user_id, $ASSET_CATEGORY_INDOOR);
 		$data['durations'] = $this->duration->getDudarion();
 		if (!$mall_assets) {
 			$mall_assets = array();

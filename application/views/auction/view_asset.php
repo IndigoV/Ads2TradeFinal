@@ -15,6 +15,11 @@
         padding: 0 !important;
     }
 
+/* BEGIN Fix map zoom */    
+#map-canvas img {max-width: inherit !important; max-height: inherit !important}
+#map-canvas-sell img {max-width: inherit !important; max-height: inherit !important} 
+/* END Fix map zoom */  
+
 </style>
 
 <!-- Below style is for bootstrap modal -->

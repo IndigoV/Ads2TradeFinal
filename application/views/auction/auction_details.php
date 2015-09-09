@@ -1,3 +1,9 @@
+<style type="text/css">
+/* BEGIN Fix map zoom */	
+#map-canvas img {max-width: inherit !important; max-height: inherit !important}
+#map-canvas-sell img {max-width: inherit !important; max-height: inherit !important} 
+/* END Fix map zoom */	
+</style>
 <?php
 //error_reporting(0);
 echo $map_1['js'];echo $map_3['js'];echo $map_5['js'];echo $map_7['js'];echo $map_9['js']; 
@@ -444,7 +450,7 @@ $bid_range = $this->input->post('bid_range');
 <!-- Locations view-->
 
 <div class="map_view" style="background-color: white;">        
-	<div id="map-canvas-sell" style="width:1053px; height:500px; margin-top:250px; margin-left:50px;"> Loading AdsMap... </div>
+	<div id="map-canvas-sell" style="width:1053px; height:500px; margin-top:50px; margin-left:50px;"> Loading AdsMap... </div>
 </div>
 
 

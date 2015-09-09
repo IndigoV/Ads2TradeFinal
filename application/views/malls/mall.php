@@ -60,7 +60,7 @@ foreach ($assets as &$asset) {
 		font-weight: bold;
 	}
 </style>
-<div class="breadcrumbs">
+<div class="breadcrumbs" style="margin-top:-100px;">
 	<h1><span class="glyphicon glyphicon-gift"></span> Indoor Assets</h1>
 </div>
 

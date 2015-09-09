@@ -49,7 +49,7 @@ class invoices extends CI_Model{
 					FROM
 					  $this->invoices_table i
 					WHERE 
-					  i.customer_id = '$user_id' and i.`status`= '$status_value'
+					  (i.customer_id = '$user_id' OR i.owner_id = '$user_id') and i.`status`= '$status_value'
 				  ");
 			}
 			elseif ($status_value == "" && $invoice_no_description <> "" && $date1 == ""  && $date2 == "" && $date3 == ""  && $amount1 == "" && $amount2 == "" && $amount3 == "")
@@ -62,7 +62,7 @@ class invoices extends CI_Model{
 					FROM
 					  $this->invoices_table i
 					WHERE 
-					  i.customer_id = '$user_id' and i.`id`= '$invoice_no_description' or i.`description`= '$invoice_no_description'
+					  (i.customer_id = '$user_id' OR i.owner_id = '$user_id') and i.`id`= '$invoice_no_description' or i.`description`= '$invoice_no_description'
 				  ");
 			}
 			elseif ($status_value == "" && $invoice_no_description == "" && $date1 <> ""  && $date2 == "" &&  $date3 == ""  && $amount1 == "" && $amount2 == "" && $amount3 == "")
@@ -75,7 +75,7 @@ class invoices extends CI_Model{
 					FROM
 					  $this->invoices_table i
 					WHERE 
-					  i.customer_id = '$user_id' and i.`datetime` LIKE '%$date1_e%'
+					  (i.customer_id = '$user_id' OR i.owner_id = '$user_id') and i.`datetime` LIKE '%$date1_e%'
 				  ");
 			}
 			elseif ($status_value == "" && $invoice_no_description == "" && $date1 == ""  && $date2 <> "" &&  $date3 <> ""  && $amount1 == "" && $amount2 == "" && $amount3 == "")
@@ -88,7 +88,7 @@ class invoices extends CI_Model{
 					FROM
 					  $this->invoices_table i
 					WHERE 
-					  i.customer_id = '$user_id' and i.`datetime` >= '$date2_e' and i.`datetime` <= '$date3_e'
+					  (i.customer_id = '$user_id' OR i.owner_id = '$user_id') and i.`datetime` >= '$date2_e' and i.`datetime` <= '$date3_e'
 				  ");
 			}
 			elseif ($status_value == "" && $invoice_no_description == "" && $date1 == ""  && $date2 == "" &&  $date3 == ""  && $amount1 <> "" && $amount2 == "" && $amount3 == "")
@@ -101,7 +101,7 @@ class invoices extends CI_Model{
 					FROM
 					  $this->invoices_table i
 					WHERE 
-					  i.customer_id = '$user_id' and i.`amount` = '$amount1'
+					  (i.customer_id = '$user_id' OR i.owner_id = '$user_id') and i.`amount` = '$amount1'
 				  ");
 			}
 			elseif ($status_value == "" && $invoice_no_description == "" && $date1 == ""  && $date2 == "" &&  $date3 == ""  && $amount1 == "" && $amount2 <> "" && $amount3 <> "")
@@ -114,7 +114,7 @@ class invoices extends CI_Model{
 					FROM
 					  $this->invoices_table i
 					WHERE 
-					  i.customer_id = '$user_id' and i.`amount` >= '$amount2' and i.`amount` <= '$amount3'
+					  (i.customer_id = '$user_id' OR i.owner_id = '$user_id') and i.`amount` >= '$amount2' and i.`amount` <= '$amount3'
 				  ");
 			}
 			elseif ($status_value <> "" && $invoice_no_description <> "" && $date1 <> ""  && $date2 == "" &&  $date3 == ""  && $amount1 <> "" && $amount2 == "" && $amount3 == "")
@@ -127,7 +127,7 @@ class invoices extends CI_Model{
 					FROM
 					  $this->invoices_table i
 					WHERE 
-					  i.customer_id = '$user_id' and i.`id`= '$invoice_no_description' 
+					  (i.customer_id = '$user_id' OR i.owner_id = '$user_id') and i.`id`= '$invoice_no_description' 
 					  or i.`description`= '$invoice_no_description' and i.`amount` = '$amount1' 
 					  and  i.`status`='$status_value' and i.datetime = '$date1_e'
 				  ");
@@ -142,7 +142,7 @@ class invoices extends CI_Model{
 					FROM
 					  $this->invoices_table i
 					WHERE 
-					  i.customer_id = '$user_id' and  i.`description`= '$invoice_no_description' or i.`id`= '$invoice_no_description' 
+					  (i.customer_id = '$user_id' OR i.owner_id = '$user_id') and  i.`description`= '$invoice_no_description' or i.`id`= '$invoice_no_description' 
 					  and i.`amount` >= '$amount2'  and i.`amount` <= '$amount3' 
 					  and  i.`status`='$status_value' and i.datetime >= '$date2_e' and i.datetime <= '$date3_e'
 				  ");
@@ -157,7 +157,7 @@ class invoices extends CI_Model{
 					FROM
 					  $this->invoices_table i
 					WHERE 
-					  i.customer_id = '$user_id'
+					  (i.customer_id = '$user_id' OR i.owner_id = '$user_id') 
 				  ");
 			}
 	        foreach ($query->result() as $row){     

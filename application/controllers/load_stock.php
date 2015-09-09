@@ -412,14 +412,14 @@ class load_stock extends CI_Controller
 		//take points from db
 		$data = array();
 		//$data['mmm'] = $this->assets->getAssetDetails();
-		$data['mmm'] = $this->auction->getAssetDetails();
-		$data['mmm1'] = $this->auction->getAssetDetail();
+		$data['mmm'] = $this->auction->getAssetDetails(); //Only show active and current auctions
+		$data['mmm1'] = $this->auction->getAssetDetail(); //Only show active and current auctions
 		//
 		//echo " testing "; exit;
-		$data['auction_rooms'] = $this->auction->getAuctionRooms(); //
+		$data['auction_rooms'] = $this->auction->getAuctionRooms(); //Only show active and current auctions
 		//echo " test "; exit;
 		$provinces['my_provinces'] = $this->province->getRegions();
-		$data2['mmm2'] = $this->auction->getAssetDetails1();
+		$data2['mmm2'] = $this->auction->getAssetDetails1();		//Only show active and current auctions
 		//get the uploaded towns
 		$towns['my_towns'] = $this->town->getTowns();
 		//get asset_types
