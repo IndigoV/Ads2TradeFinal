@@ -17,8 +17,11 @@ if($user_type == 2 || $user_type == 3 || $user_type > 0){
   $this->load->view('auction/topmenu');
 }
 ?>
+<div class="main col-xs-12">
+
         <form method="post" class="main col-xs-12 actions_home_page" action="">
 
+        <!--
           <div class="top_form">
             <div class="row">
               <div class="col-sm-3">
@@ -88,21 +91,7 @@ if($user_type == 2 || $user_type == 3 || $user_type > 0){
                   </select>
                 </p>
               </div>
-<!--
-              <div class="col-sm-3">
-                <div class="row">
-                  <p class="col-xs-6">
-                    <label for="first_name">From Date</label>                           
-                    <input type="date" vname="from_date" id="from_date" class="form-control">
-                  </p>
-                  <p class="col-xs-6">
-                    <label for="first_name">To Date</label>                           
-                    <input type="date" vname="to_date" id="to_date" class="form-control">
-                  </p>
-                </div>
-              </div>
 
--->
             </div>
 
         <div class="row">
@@ -113,8 +102,7 @@ if($user_type == 2 || $user_type == 3 || $user_type > 0){
                 <label for="filter">Site Name, Description or Location</label>  
                 <input type="text" class="form-control" placeholder="Type Site Name, Description or Location ..." value="<?php echo isset($filter)?$filter:'';?>" name="filter">
 
-              </p><!-- /input-group -->
-              <!-- /.col-lg-6 -->
+              </p>
 
           </div>
 
@@ -127,13 +115,15 @@ if($user_type == 2 || $user_type == 3 || $user_type > 0){
 
             <div class="clear"></div>
           </div>
-            
+
+          </form>  
+          -->
             
             <div class="text-center">
               <br>
               <div class="btn-group">
                 <button type="button" class="btn btn-default show_auctions_locations active">Show Locations</button>
-                <button type="button" class="btn btn-default show_auctions_map" id="showmap">Show Map</button>
+                <button type="button" class="btn btn-default show_auctions_map" id="showmap" onclick="forceMapLoad()">Show Map</button>
               </div>
             </div>
             
@@ -255,7 +245,11 @@ if($user_type == 2 || $user_type == 3 || $user_type > 0){
 
       <hr>
 
-    </form><!--Main -->
+    </form>
+
+    </div>
+
+    <!--Main -->
 
     <!-- View/Edit Asset Site Details-->
 
@@ -428,7 +422,22 @@ if (bid < min ){
   var adsMap = false;
   var map, mapA; //map (main map): mapA (for asset popup)
 
+
+  function forceMapLoad(){
+    initialize();
+    if(map){
+      //alert('Show Map CLicked');
+      //we have to set center for map after resize, but we need to know center BEFORE we resize it
+      //$(window).resize();
+      $(window).trigger('resize');
+      var center = map.getCenter();
+      google.maps.event.trigger(map, "resize"); //this fix the problem with not completely map
+      map.setCenter(center);
+    }
+  }
+
   $('#showmap').click(function(e){
+    //debugger;
     initialize();
     if(map){
       //alert('Show Map CLicked');
@@ -443,7 +452,8 @@ if (bid < min ){
           //clickEvent.button = 1;  // left click
           window.fireEvent ("onresize", resizeEvent);
       }*/
-    }
+    } 
+
   });
 
   function initialize() {

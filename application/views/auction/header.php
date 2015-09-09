@@ -40,10 +40,11 @@ if(!$this->session->userdata('user_id')){
 
     <script src="<?php echo base_url();?>assets/scripts.js" type="text/javascript"></script>
 
-
+    <!--
     <script src="<?php echo base_url();?>assets/js/amcharts/amcharts.js" type="text/javascript"></script>
     <script src="<?php echo base_url();?>assets/js/amcharts/serial.js" type="text/javascript"></script>
-
+    -->
+    
     <link rel="stylesheet" href="<?php echo base_url();?>assets/css/chosen.css">
     <script src="<?php echo base_url();?>assets/js/chosen.jquery.js" type="text/javascript"></script>
 

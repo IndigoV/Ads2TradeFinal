@@ -500,13 +500,19 @@ class auction extends CI_Model {
 
           //Setup user condition if any
           $condition = '';
+
           if($user_id>0){
-            $condition = " AND (au.use_id = '$user_id') ";
+            $condition .= " AND (au.use_id = '$user_id') ";
           }    
 
           //Setup condition based on filters (if any)
           //Ignore user id
           $condition = '';
+          
+          // Only show active current auctions
+          $condition .= " AND ( au.status=1 ) AND ( au.starts <= CURDATE()) AND ( au.ends >= CURDATE())";    
+          // 
+
           $mef_ids = $this->input->post('mef_id');//media family
           if(count($mef_ids)>0 && !empty($mef_ids)){
               $mef_id_list = "'".implode("','", $duration)."'";
@@ -560,6 +566,11 @@ class auction extends CI_Model {
 
           //Setup condition based on filters (if any)
           $condition = '';
+
+          // Only show active current auctions
+          $condition .= " AND ( auctions.status=1 ) AND ( auctions.starts <= CURDATE()) AND ( auctions.ends >= CURDATE())";    
+          // 
+
           $mef_ids = $this->input->post('mef_id');//media family
           if(count($mef_ids)>0 && !empty($mef_ids)){
               $mef_id_list = implode(',', $mef_ids);
@@ -675,6 +686,11 @@ class auction extends CI_Model {
 
       //Setup condition based on filters (if any)
       $condition = '';
+
+      // Only show active current auctions
+      $condition .= " AND ( auctions.status=1 ) AND ( auctions.starts <= CURDATE()) AND ( auctions.ends >= CURDATE())";  
+      // 
+
       $mef_ids = $this->input->post('mef_id');//media family
       if(count($mef_ids)>0 && !empty($mef_ids)){
           $mef_id_list = implode(',', $mef_ids);
@@ -692,9 +708,7 @@ class auction extends CI_Model {
       if(count($duration)>0 && !empty($duration)){
           $duration_list = implode(',', $duration);
           $condition .= " AND ( auctions.duration IN ($duration_list) ) ";
-      }   
-
-	    
+      }   	    
 
       $filter = $this->input->post('filter');//filter
       if($filter != ''){
@@ -737,6 +751,11 @@ class auction extends CI_Model {
              
       //Setup condition based on filters (if any)
       $condition = '';
+
+      // Only show active current auctions
+      $condition .= " AND ( auctions.status=1 ) AND ( auctions.starts <= CURDATE()) AND ( auctions.ends >= CURDATE())";   
+      // 
+
       $mef_ids = $this->input->post('mef_id');//media family
       if(count($mef_ids)>0 && !empty($mef_ids)){
           $mef_id_list = implode(',', $mef_ids);
@@ -813,6 +832,10 @@ class auction extends CI_Model {
       $radius_search_condition = '';
       $lat = 0;
       $lng = 0;
+
+      // Only show active current auctions
+      $condition .= " AND ( auctions.status=1 ) AND ( auctions.starts <= CURDATE()) AND ( auctions.ends >= CURDATE())";    
+      // 
 
       //area filter if any is specified
       // if area is set then do a radius search on the given area name
