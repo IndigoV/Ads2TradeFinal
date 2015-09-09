@@ -27,7 +27,7 @@ function createMap() {
         //    //icon: 'assets/mapping/images/user_marker.png'
         //});
         var optOptions = {
-            urlBase: 'http://localhost/codeigniter/ads2trade/',
+            urlBase: 'http://indigostorage.co.za/Ads2TradeFinal/',
             showRadii: true,
             currentFilterCriteria: {},
             showSearchPOIButton: true,
@@ -78,14 +78,14 @@ function initialize() {
             address = (place.address_components[0] && place.address_components[0].short_name || '')+', '+(place.address_components[3] && place.address_components[3].long_name || '')+', '+(place.address_components[4] && place.address_components[4].long_name || '');
         }
         // get lat and lang
-        console.log(address);
+        //console.log(address);
         if(getLatLong(address) != undefined) {
             //console.log(latLng);
             var latLng = getLatLong(address);
             var latlongs = latLng.split(',');
             mezmerize2(address, latlongs[0], latlongs[1]);
         } else {
-            console.log('failed');
+            //console.log('failed');
         }
 
     });
@@ -139,12 +139,12 @@ $('#mapModal').on('shown.bs.modal', function (e) {
         //icon: 'assets/mapping/images/user_marker.png'
     });
     var optOptions = {
-        urlBase: 'http://localhost/codeigniter/ads2trade/',
+        urlBase: 'http://indigostorage.co.za/Ads2TradeFinal/',
         showRadii: true,
         currentFilterCriteria: {},
-        showSearchPOIButton: false,
-        showFilterButton: false,
-        showScreenShotButton: false,
+        showSearchPOIButton: true,
+        showFilterButton: true,
+        showScreenShotButton: true,
         showLegend: false
     };
     var clusterOptions = {};

@@ -54,6 +54,19 @@
                 </div>
             </div>
         <?php } ?>
+        <?php if(count($screenshots) > 0 ) { ?>
+            <div>
+                Images<br />
+                <hr />
+                    <table border="0">
+                    <?php foreach($screenshots as $key => $image_location) { ?>
+                        <tr>
+                            <td><img src="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/Ads2TradeFinal'. $image_location; ?>" alt="test alt attribute" width="90" height="90" border="0" /></td>
+                        </tr>
+                    <?php } ?>
+                    </table>
+            </div>
+        <?php } ?>
     </div>
 <?php } ?>
 <div>

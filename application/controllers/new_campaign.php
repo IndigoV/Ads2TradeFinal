@@ -193,8 +193,14 @@ class new_campaign extends CI_Controller
         //$allSelectedAssets = $this->db->query("SELECT * FROM rfp_for_submission_assets_selected INNER JOIN asset ON asset.ass_id = rfp_for_submission_assets_selected.asset_id WHERE rfp_for_submission_id = ".$rfp_for_submission_id." AND accepted_by_media_owner = 1")->result();
         $allSelectedAssets = $this->rfp_for_submission_assets_selected->getRfpSubmissionSelectedAssets($rfp_for_submission_id);
 
+        // Get all images
+        $rfp_for_submission = $this->rfp_for_submission->findById($rfp_for_submission_id);
+        $screenShots = $this->rfp->getAllScreenShotsForCampaign($rfp_for_submission->campaign_id);
+
         $allInfoHTML = "";
         $data = array();
+
+        //echo "<pre>". print_r($allSelectedAssets, 1) . "</pre>"; exit();
 
         foreach($allSelectedAssets as $asset) {
             $tempHTML = "";
@@ -210,7 +216,7 @@ class new_campaign extends CI_Controller
             if(!isset($data[$asset->location])) {
                 $data[$asset->location] = array();
             }
-            if( isset($data[$asset->location][$mediaCategory]) ) {
+            if( !isset($data[$asset->location][$mediaCategory]) ) {
                 $data[$asset->location][$mediaCategory] = array();
             }
             $data[$asset->location][$mediaCategory][] = $asset;
@@ -235,7 +241,7 @@ class new_campaign extends CI_Controller
         $pdf->AddPage();
         $html = "<h1>Ads 2 trade</h1><hr /><br /><br />".$allInfoHTML.'<br />>'.$tempHTML;
 
-        $html = $this->load->view('quotation_pdf_sheet', array('data'=>$data), true);
+        $html = $this->load->view('quotation_pdf_sheet', array('data'=>$data, 'screenshots'=>$screenShots), true);
 
         $pdf->writeHTML($html, true, false, true, false, '');
 

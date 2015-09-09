@@ -1463,6 +1463,23 @@ $(document).on('change', '.select_asset_for_location_map', function(){
     } else {
         removeMarker(lat, long, map, assetName, mec_id, cost, price, assetName, asset_id, loc);
     }
+    var optOptions = {
+        urlBase: 'http://indigostorage.co.za/Ads2TradeFinal/',
+        showRadii: true,
+        currentFilterCriteria: {},
+        showSearchPOIButton: true,
+        showFilterButton: true,
+        showScreenShotButton: true,
+        showLegend: false
+    };
+    var clusterOptions = {};
+    var spiderOptions = {};
+    var html2canvasOptions = {
+        logging: false
+    };
+
+    adsMap = new AdsMap(map, clusterOptions, spiderOptions, html2canvasOptions, optOptions);
+    google.maps.event.trigger(map, 'resize');
 });
 
 function addMarker(pos, map, assetName, lat, long, mec_id, cost, price, assetName, assetid, loc) {
