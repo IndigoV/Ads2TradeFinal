@@ -259,14 +259,18 @@ switch($i){
 		  //invoice details
 	      if($new_status == 9 || $new_status == 11){
 
+				  $advertiser = $this->campaign->getCampaignAdvertiser($campaign_id);
+				  $advertiser_id = isset($advertiser[0]->adv_id)?$advertiser[0]->adv_id:0;
+
 	      	      $invoice = array();
 	      	      $invoice['asset_id']    = "";
-	      	      $invoice['owner_id']    = "";
+	      	      $invoice['agent_id']    = $user_id; //Operator
+	      	      $invoice['owner_id']    = $user_id; //Media Owner ID - For now the invoice is between Advertiser and Adreach Operator
 	      	      //No agent_id/operator ( only applies to campaigns ??)          
 	      	      $invoice['campaign_id'] = $campaign_id;
 	      	      $invoice['description'] = 'Campaign '.$invoice_type .' - '.$comments;
 	      	      $invoice['amount']      = $this->input->post('invoice_amount');
-	      	      $invoice['customer_id'] = $user_id; //TODO: get advertiser id
+	      	      $invoice['customer_id'] = $advertiser_id; //TODO: get advertiser id
 	      
 	      	      $this->db->insert('invoice', $invoice);
 	      	      $invoice_no = $this->db->insert_id();
