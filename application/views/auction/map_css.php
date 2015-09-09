@@ -31,4 +31,11 @@
     width:auto;  /* overidde input width on the filter button */
   }
 
+  img{max-width: none !important; /* Fix broken google maps controls*/}
+
+  .gm-style img { max-width: none; }
+.gm-style label { width: auto; display: inline; }
+#map-canvas img {max-width: inherit !important; max-height: inherit !important}
+#map-canvas-sell img {max-width: inherit !important; max-height: inherit !important} 
+
 </style>

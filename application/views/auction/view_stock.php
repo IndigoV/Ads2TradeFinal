@@ -1,3 +1,8 @@
+<style type="text/css">
+/* BEGIN Fix map zoom */
+.map_view img {max-width: inherit !important; max-height: inherit !important}
+/* END Fix map zoom */    
+</style>
 <?php 
 echo $map['js'];
 $auction_id = $this->input->get('auction_id');

@@ -1,4 +1,10 @@
 <!--    <script src="assets/jquery-1.7.2.min.js" type="text/javascript"></script> -->
+<style type="text/css">
+    /* BEGIN Fix map zoom */    
+    #map_canvas img {max-width: inherit !important; max-height: inherit !important}
+    #map img {max-width: inherit !important; max-height: inherit !important} 
+    /* END Fix map zoom */      
+</style>
 <div style="height:0px; width: 0px;">
     <?php
         echo $map1['js'];
