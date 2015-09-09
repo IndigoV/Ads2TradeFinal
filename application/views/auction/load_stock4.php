@@ -342,7 +342,10 @@ $asset_type = $this->input->get('type'); //outdoor or indoor
                 <div class="bs-example bs-example-tabs">
                     <ul id="myTab" class="nav nav-tabs" role="tablist">
                       <li class="active"><a href="#table_view" role="tab" data-toggle="tab">Table View</a></li>
+                      <!--
+                       TODO: Uncomment Gantt View after 11/09/2015  
                       <li><a href="#gantt_view" role="tab" data-toggle="tab">Gantt Chart View</a></li>
+                      -->
                       <!--
                       <li><a href="#other_view" role="tab" data-toggle="tab">Other View</a></li>
                       -->
