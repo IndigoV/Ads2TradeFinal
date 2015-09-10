@@ -1223,7 +1223,7 @@ $("#lblPrintSummary").on('click',function(){
 $("#lblPrintDetail").on('click',function(){
 	//alert('Printing Detailed...');
 	//Get all selected assets
-	printSpecSheets();
+	printSpecSheets(1);
 	//print table div
 });
 
@@ -1259,7 +1259,11 @@ function printSpecSheets(detailed){
     	alert('You have not selected any assets');
     } else {
         //alert(' Selected '+allSelected);
-        var specSheetPage = "<?php echo site_url('auctions/spec_sheet_list?asset_ids='); ?>"+allSelected;
+        if(detailed == 1){
+          var specSheetPage = "<?php echo site_url('auctions/spec_sheet_list_detail?asset_ids='); ?>"+allSelected;
+        } else {
+          var specSheetPage = "<?php echo site_url('auctions/spec_sheet_list?asset_ids='); ?>"+allSelected;
+        }
         //alert(specSheetPage);
         PopupURL(specSheetPage);
     	console.log(specSheetPage);	

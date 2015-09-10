@@ -774,17 +774,22 @@ function getAssetDetailsm()
 
 	}
 
-	function getAsset(){
-
-	   if (isset($_REQUEST['ass_id'])){
+	function getAsset($ass_id=0){
+		//echo "get asset";
+	   if (isset($_REQUEST['ass_id']) && $ass_id==0){
 		   $this->db->where('asset.ass_id', $this->input->get_post('ass_id'));
+	   }
+
+	   if($ass_id > 0){
+	   	   $this->db->where('asset.ass_id', $ass_id); 
 	   }
 
 	   if (isset($_REQUEST['auction_id'])){
 		   $this->db->where('au.id', $this->input->get_post('auction_id'));
 	   }
 
-	   $this->db->select('asset.*,au.*,up.*,rc.*,mu.meu_unit,mu.meu_unit as rate_unit,mu3.meu_unit as h_unit,mu2.meu_unit as w_unit,mu4.meu_unit as lead_time_unit');
+	   $this->db->distinct();
+	   $this->db->select(' asset.*,au.*,up.*,rc.*,mu.meu_unit,mu.meu_unit as rate_unit,mu3.meu_unit as h_unit,mu2.meu_unit as w_unit,mu4.meu_unit as lead_time_unit');
 	   $this->db->from('asset');
 	   $select_query =  $this->db->join('rate_card rc', 'asset.ass_id = rc.ass_id', 'left outer');
 	   $select_query =  $this->db->join('measurement_unit mu', 'mu.meu_id = rc.meu_id', 'left outer');
@@ -795,6 +800,7 @@ function getAssetDetailsm()
 	   $select_query =  $this->db->join('uploaded_documents up', 'up.ass_id = asset.ass_id', 'left');
 
 		$select_query = $this->db->get();
+		//echo $this->db->last_query();
 
 		if ($select_query->num_rows > 0) { 
 			foreach ($select_query->result() as $row) {

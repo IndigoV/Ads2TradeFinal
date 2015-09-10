@@ -404,6 +404,41 @@ class auctions extends CI_Controller
 		make_pdf($doc_html, $doc_name, $doc_title, $doc_orientation);
 	}
 
+	public function spec_sheet_list_detail($asset_name="", $asset_ref="", $asset_description="")
+	{
+		//asset id
+		$asset_ids = $this->input->get('asset_ids');
+		//echo $asset_ids;
+		$ids = $this->input->get('ids');
+		$ids_array = array_map("intval", explode(",", $asset_ids));
+		//print_r($ids_array);
+		//Setup PDF Doc details:
+		//	Title 
+		//	Filename
+		//	Orientation
+		$doc_title = 'Ads2Trade - Asset Specsheet Details '; 
+		$doc_name  = 'Ads2trade_Specsheet_Details_'.date('Ymd_hjs');
+		$doc_orientation = 'L';
+
+		//Load HTML doc
+        $data = array();
+        $data['asset_id'] = $ids_array[0]; //asset_id will always be 0
+        //$doc_html = $this->load->view('spec_sheet_list_detail', $data, true);
+        //print_r($data);
+        //echo $ids_array[1]." --- ".count($ids_array); 
+        if(isset($ids_array[1])){
+        	for($i=1; $i<count($ids_array);$i++){
+        		$data['asset_id'] = $ids_array[$i];
+        		//echo "<br>- $i - ".$data['asset_id'];
+				$doc_html .= $this->load->view('spec_sheet_list_detail', $data, true);   //echo $doc_html;
+				//exit;     		
+        	}
+        }
+        //echo $doc_html;
+        //make PDF 
+		make_pdf($doc_html, $doc_name, $doc_title, $doc_orientation);
+	}
+
     public function proposal()
 	{
 		//get the uploaded regions
