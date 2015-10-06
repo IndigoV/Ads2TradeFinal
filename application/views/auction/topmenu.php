@@ -289,6 +289,7 @@ NOTE: Blessed - 18.08.2015
     </li>
   </ul>
 </div>
+</form>
 <script type="text/javascript">
 
 $(document).ready(function() {
